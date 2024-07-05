@@ -1,0 +1,11 @@
+client/node_modules
+client/package.json
+client/package copy-lock.json
+client/package.json
+client/webpack.config.js
+
+server/node_modules
+server/.env
+server/package.json
+server/package-lock.json
+server/files
