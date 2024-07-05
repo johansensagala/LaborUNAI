@@ -51,7 +51,7 @@ const BerandaDosen = () => {
             Halo { !!dosen && dosen.nama }, Selamat Datang!!!
           </div>
           <div className="is-size-5 has-text-centered has-text-weight-bold" style={{ color: '#333' }}>
-            Anda dapat mengelola pekerjaan disini!!!
+            Anda dapat mengelola pekerjaan disini!
           </div>
         </div>
         {lowonganPekerjaan.map((lowongan, index) => (
