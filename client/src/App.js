@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import BerandaMahasiswa from './components/mahasiswa/BerandaMahasiswa';
 import BerandaDosen from './components/dosen/BerandaDosen';
 import DetailLowonganPekerjaan from './components/mahasiswa/DetailLowonganPekerjaan';
@@ -39,6 +39,10 @@ const App = () => {
           </Route>
         </Routes>
       </DosenContextProvider>
+
+      <Routes>
+        <Route path="/" element={<Navigate to="/mhs/login" />} />
+      </Routes>
     </BrowserRouter>
   );
 }

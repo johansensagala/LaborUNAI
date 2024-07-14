@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { FaCheck } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import Navbar from "../../layouts/Navbar";
+import { MahasiswaContext } from '../../context/MahasiswaContext';
 import { useNavigate, useLocation } from "react-router-dom";
 
 const DetailLowonganPekerjaan = () => {
+    const { mahasiswa } = useContext(MahasiswaContext);
     const [lowonganPekerjaan, setLowonganPekerjaan] = useState({});
+    const [lamaran, setLamaran] = useState({});
     const { id } = useParams();
     const [departemenNames, setDepartemenNames] = useState('');
     const [keterampilan, setKeterampilan] = useState([]);
@@ -39,6 +42,24 @@ const DetailLowonganPekerjaan = () => {
         }
     };
 
+    const startLamar = async () => {
+        try {
+            const response = await axios.post(`http://localhost:5000/lamaran/${mahasiswa.id}/${id}`);
+        } catch (error) {
+            console.error("Error fetching departemen data:", error);
+        }
+    };
+
+    const findLamaran = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5000/lamaran/${mahasiswa.id}/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            throw error;
+        }
+    };    
+
     const handleLamarClick = () => {
         Swal.fire({
             title: 'Konfirmasi Lamaran',
@@ -54,12 +75,21 @@ const DetailLowonganPekerjaan = () => {
         });
     };    
 
-    const handleProsesLamar = () => {
-        navigate(`/mhs/lowongan/${id}/lamar`, { 
-            state: { 
-                lowonganPekerjaan: lowonganPekerjaan
-            } 
-        });
+    const handleProsesLamar = async () => {
+        try {
+            const lamaranData = await startLamar();
+            const lamaranResult = await findLamaran();
+            setLamaran(lamaranResult);
+
+            navigate(`/mhs/lowongan/${id}/lamar`, { 
+                state: { 
+                    lowonganPekerjaan: lowonganPekerjaan,
+                    lamaran: lamaranResult
+                } 
+            });
+        } catch (error) {
+            console.error("Gagal memproses lamaran:", error);
+        }
     };
 
     return (

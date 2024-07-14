@@ -336,39 +336,41 @@ const BuatPertanyaan = () => {
             <Navbar />
             <div className="column is-half is-offset-one-quarter">
                 <div className="box p-5 m-5" style={{ background: '#f5f5f5', color: '#333' }}>
-                    <div className="column is-full mb-6">
-                        <div className="is-size-5 has-text-centered has-text-weight-bold" style={{ color: '#333' }}>
-                            Tambah Pertanyaan
+                        <div className="column is-full mb-6">
+                            <div className="is-size-5 has-text-centered has-text-weight-bold" style={{ color: '#333' }}>
+                                Tambah Pertanyaan
+                            </div>
                         </div>
-                    </div>
-                    <button className="button is-primary" onClick={() => setShowModalAdd(true)}>Tambah Pertanyaan</button>
-                    
-                    <div className="box my-5 p-5">
-                        {pertanyaan.length === 0 && <p className="mb-4">Belum ada pertanyaan</p>}
-                        {pertanyaan.map((item, index) => {
-                            if (item.jenisPertanyaan === "text") {
-                                return (
-                                    <div className="columns is-flex">
-                                        <div className="column is-three-quarters" key={index}>
-                                            <div className="field">
-                                                <label className="label">{index + 1}. {item.inputPertanyaan}</label>
-                                                <div className="control">
-                                                    <input className="input" type="text" placeholder="Masukkan jawaban Anda" readOnly/>
+                        <button className="button is-primary" onClick={() => setShowModalAdd(true)}>Tambah Pertanyaan</button>
+                        
+                        <div className="box my-5 p-5">
+                            {pertanyaan.length === 0 && <p className="mb-4">Belum ada pertanyaan</p>}
+                            {pertanyaan.map((item, index) => {
+                                if (item.jenisPertanyaan === "text") {
+                                    return (
+                                        <div className="columns is-flex">
+                                            <div className="column is-three-quarters" key={index}>
+                                                <div className="field">
+                                                    <label className="label">{index + 1}. {item.inputPertanyaan}</label>
+                                                    <div className="control">
+                                                        <input className="input" type="text" placeholder="Masukkan jawaban Anda" readOnly/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="column is-one-quarter" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                                <div style={{ marginLeft: 'auto' }}>
+                                                    <FaEdit 
+                                                        onClick={() => handleEdit(index)}
+                                                        style={{ cursor: 'pointer', marginRight: '10px' }}
+                                                    />
+                                                    <FaTrash 
+                                                        onClick={() => handleDelete(index)}
+                                                        style={{ cursor: 'pointer' }}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="column is-one-quarter" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                            <FaEdit 
-                                                onClick={() => handleEdit(index)}
-                                                style={{ cursor: 'pointer' }}
-                                            />
-                                            <FaTrash 
-                                                onClick={() => handleDelete(index)}
-                                                style={{ cursor: 'pointer' }}
-                                            />
-                                        </div>
-                                    </div>
-                                );
+                                    );
                             } else if (item.jenisPertanyaan === "textarea") {
                                 return (
                                     <div className="columns is-flex">
@@ -379,14 +381,16 @@ const BuatPertanyaan = () => {
                                             </div>
                                         </div>
                                         <div className="column is-one-quarter" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                            <FaEdit 
-                                                onClick={() => handleEdit(index)}
-                                                style={{ cursor: 'pointer' }}
-                                            />
-                                            <FaTrash 
-                                                onClick={() => handleDelete(index)}
-                                                style={{ cursor: 'pointer' }}
-                                            />
+                                            <div style={{ marginLeft: 'auto' }}>
+                                                <FaEdit 
+                                                    onClick={() => handleEdit(index)}
+                                                    style={{ cursor: 'pointer', marginRight: '10px' }}
+                                                />
+                                                <FaTrash 
+                                                    onClick={() => handleDelete(index)}
+                                                    style={{ cursor: 'pointer' }}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 );
@@ -411,14 +415,16 @@ const BuatPertanyaan = () => {
                                             </div>
                                         </div>
                                         <div className="column is-one-quarter" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                            <FaEdit 
-                                                onClick={() => handleEdit(index)}
-                                                style={{ cursor: 'pointer' }}
-                                            />
-                                            <FaTrash 
-                                                onClick={() => handleDelete(index)}
-                                                style={{ cursor: 'pointer' }}
-                                            />
+                                            <div style={{ marginLeft: 'auto' }}>
+                                                <FaEdit 
+                                                    onClick={() => handleEdit(index)}
+                                                    style={{ cursor: 'pointer', marginRight: '10px' }}
+                                                />
+                                                <FaTrash 
+                                                    onClick={() => handleDelete(index)}
+                                                    style={{ cursor: 'pointer' }}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 );
@@ -443,14 +449,16 @@ const BuatPertanyaan = () => {
                                             </div>
                                         </div>
                                         <div className="column is-one-quarter" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                            <FaEdit 
-                                                onClick={() => handleEdit(index)}
-                                                style={{ cursor: 'pointer' }}
-                                            />
-                                            <FaTrash 
-                                                onClick={() => handleDelete(index)}
-                                                style={{ cursor: 'pointer' }}
-                                            />
+                                            <div style={{ marginLeft: 'auto' }}>
+                                                <FaEdit 
+                                                    onClick={() => handleEdit(index)}
+                                                    style={{ cursor: 'pointer', marginRight: '10px' }}
+                                                />
+                                                <FaTrash 
+                                                    onClick={() => handleDelete(index)}
+                                                    style={{ cursor: 'pointer' }}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 );

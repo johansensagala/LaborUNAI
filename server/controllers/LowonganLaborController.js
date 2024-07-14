@@ -34,7 +34,18 @@ const getLowonganLaborByDosen = async (req, res) => {
 }
 
 const saveLowonganLabor = async (req, res) => {
-    const { posisi, departemenId, penanggungJawab, deskripsi, tanggungJawab, persyaratan, gaji, tanggalPosting, tanggalTenggat, perluTest, tersedia, pertanyaan } = req.body;
+    const { posisi, departemenId, penanggungJawab, deskripsi, tanggungJawab, persyaratan, gaji, tanggalPosting, tanggalTenggat, UploadCv, pertanyaanUmum, pertanyaan } = req.body;
+
+    let perluPertanyaanUmum = false;
+    let perluTest = false;
+
+    if (pertanyaanUmum && pertanyaanUmum.length > 0) {
+        perluPertanyaanUmum = true;
+    }
+
+    if (pertanyaan && pertanyaan.length > 0) {
+        perluTest = true;
+    }
 
     const lowonganLabor = new LowonganLabor({
         posisi,
@@ -46,8 +57,11 @@ const saveLowonganLabor = async (req, res) => {
         gaji,
         tanggalPosting,
         tanggalTenggat,
+        perluUploadCv,
+        perluPertanyaanUmum,
         perluTest,
-        tersedia,
+        UploadCv,
+        pertanyaanUmum,
         pertanyaan
     });
 
@@ -59,4 +73,16 @@ const saveLowonganLabor = async (req, res) => {
     }
 }
 
-export { getAllLowonganLabor, getLowonganLabor, getLowonganLaborByDosen, saveLowonganLabor };
+const updateLowonganLabor = async (req, res) => {
+    try {
+        const updatedLowonganLabor = await LowonganLabor.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedLowonganLabor) {
+            return res.status(404).json({ message: 'Lowongan Labor tidak ditemukan' });
+        }
+        res.status(200).json(updatedLowonganLabor);
+    } catch (e) {
+        res.status(400).json({ message: e.message });
+    }
+}
+
+export { getAllLowonganLabor, getLowonganLabor, getLowonganLaborByDosen, saveLowonganLabor, updateLowonganLabor };

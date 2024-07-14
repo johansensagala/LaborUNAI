@@ -6,10 +6,12 @@ import path from 'path';
 
 import { getAllMahasiswa, saveMahasiswa, getKeterampilan, updateKeterampilan, getCv, uploadCv, sendCv, deleteCv } from './controllers/MahasiswaController.js';
 import { getAllJurusan, saveJurusan } from './controllers/JurusanController.js';
+import { getAllPertanyaanUmum, savePertanyaanUmum, saveManyPertanyaanUmum } from './controllers/PertanyaanUmumController.js';
 import { getAllFakultas, saveFakultas } from './controllers/FakultasController.js';
 import { getAllBidangKeahlian, saveBidangKeahlian } from './controllers/BidangKeahlianController.js';
 import { getAllDosen, saveDosen } from './controllers/DosenController.js';
-import { getAllLowonganLabor, getLowonganLabor, getLowonganLaborByDosen, saveLowonganLabor } from './controllers/LowonganLaborController.js';
+import { getAllLowonganLabor, getLowonganLabor, getLowonganLaborByDosen, saveLowonganLabor, updateLowonganLabor } from './controllers/LowonganLaborController.js';
+import { getAllLamaran, getLamaran, getLamaranByMahasiswaAndLowonganLabor, saveLamaran, startLamar } from './controllers/LamaranController.js';
 import { getDepartemen, getDepartemenByDosen, saveDepartemen } from './controllers/DepartemenController.js';
 import { loginMhs, getMhs, logoutMhs } from './controllers/LoginMhsController.js';
 import { loginDosen, getDosen, logoutDosen } from './controllers/LoginDosenController.js';
@@ -48,6 +50,13 @@ router.route('/jurusan')
   .get(getAllJurusan)
   .post(saveJurusan);
 
+router.route('/pertanyaan-umum')
+  .get(getAllPertanyaanUmum)
+  .post(savePertanyaanUmum);
+
+router.route('/pertanyaan-umum/save-many')
+  .post(saveManyPertanyaanUmum);
+
 router.route('/fakultas')
   .get(getAllFakultas)
   .post(saveFakultas);
@@ -63,10 +72,22 @@ router.route('/dosens')
 router.route('/lowongan-labor')
   .get(getAllLowonganLabor)
   .post(saveLowonganLabor);
-
-router.route('/lowongan-labor/:id')
-  .get(getLowonganLabor);
   
+router.route('/lowongan-labor/:id')
+  .get(getLowonganLabor)
+  .put(updateLowonganLabor);
+
+router.route('/lamaran')
+  .get(getAllLamaran)
+  .post(saveLamaran);
+
+router.route('/lamaran/:id')
+  .get(getLamaran);
+
+router.route('/lamaran/:mahasiswaId/:lowonganLaborId')
+  .get(getLamaranByMahasiswaAndLowonganLabor)
+  .post(startLamar);
+
 router.route('/lowongan-labor/dosen/:id')
   .get(getLowonganLaborByDosen);
   

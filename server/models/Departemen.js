@@ -17,6 +17,7 @@ const DepartemenSchema = new mongoose.Schema({
     isDeleted: {
         type: Boolean,
         default: false,
+        required: true
     },
     deletedAt: {
         type: Date,

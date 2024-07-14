@@ -1,16 +1,19 @@
 import mongoose from 'mongoose';
 
-const JurusanSchema = new mongoose.Schema({
-    namaJurusan: {
+const PertanyaanUmumSchema = new mongoose.Schema({
+    pertanyaan: {
         type: String,
         required: true,
     },
-    fakultasId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Fakultas',
+    kode: {
+        type: String,
         required: true,
     },
-    deskripsi: {
+    type: {
+        type: String,
+        required: true,
+    },
+    tujuan: {
         type: String,
         required: true,
     },
@@ -23,10 +26,10 @@ const JurusanSchema = new mongoose.Schema({
         type: Date,
     },
 }, {
-    collection: 'Jurusan',
+    collection: 'PertanyaanUmum',
     timestamps: true,
 });
 
-const Jurusan = mongoose.model('Jurusan', JurusanSchema);
+const PertanyaanUmum = mongoose.model('PertanyaanUmum', PertanyaanUmumSchema);
 
-export default Jurusan;
+export default PertanyaanUmum;

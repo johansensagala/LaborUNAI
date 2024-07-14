@@ -1,29 +1,26 @@
 import mongoose from 'mongoose';
 
 const PertanyaanSchema = new mongoose.Schema({
+    nomor: {
+        type: Number,
+    },
     inputPertanyaan: {
         type: String,
-        required: true,
     },
     jenisPertanyaan: {
         type: String,
-        required: true,
     },
     jumlahPertanyaanRadio: {
         type: Number,
-        required: false,
     },
     jumlahPertanyaanCheckbox: {
         type: Number,
-        required: false,
     },
     optionPertanyaanRadio: {
         type: [String],
-        required: false,
     },
     optionPertanyaanCheckbox: {
         type: [String],
-        required: false,
     },
 });
 
@@ -66,21 +63,42 @@ const LowonganLaborSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
+    perluUploadCv: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
+    perluPertanyaanUmum: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
     perluTest: {
         type: Boolean,
         required: true,
+        default: false,
+    },
+    perluCatatanSingkat: {
+        type: Boolean,
+        required: true,
+        default: false,
     },
     tersedia: {
         type: Boolean,
+        default: true,
         required: true,
+    },
+    pertanyaanUmum: {
+        type: [String],
+        ref: 'PertanyaanUmum',
     },
     pertanyaan: {
         type: [PertanyaanSchema],
-        default: [],
     },
     isDeleted: {
         type: Boolean,
         default: false,
+        required: true
     },
     deletedAt: {
         type: Date,
