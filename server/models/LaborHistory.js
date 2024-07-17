@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const RiwayatLaborSchema = new mongoose.Schema({
+const LaborHistorySchema = new mongoose.Schema({
     laborId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Labor',
@@ -16,7 +16,7 @@ const RiwayatLaborSchema = new mongoose.Schema({
     },
     rekapitulasiBulanan: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'RekapitulasiBulanan',
+        ref: 'MonthlyRecapitulation',
     }],
     isDeleted: {
         type: Boolean,
@@ -27,10 +27,10 @@ const RiwayatLaborSchema = new mongoose.Schema({
         type: Date,
     },
 }, {
-    collection: 'RiwayatLabor',
+    collection: 'LaborHistory',
     timestamps: true,
 });
 
-const RiwayatLabor = mongoose.model('RiwayatLabor', RiwayatLaborSchema);
+const LaborHistory = mongoose.model('LaborHistory', LaborHistorySchema);
 
-export default RiwayatLabor;
+export default LaborHistory;

@@ -1,8 +1,13 @@
 import mongoose from 'mongoose';
 
-const FakultasSchema = new mongoose.Schema({
-    namaFakultas: {
+const MajorSchema = new mongoose.Schema({
+    namaMajor: {
         type: String,
+        required: true,
+    },
+    fakultasId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Faculty',
         required: true,
     },
     deskripsi: {
@@ -18,10 +23,10 @@ const FakultasSchema = new mongoose.Schema({
         type: Date,
     },
 }, {
-    collection: 'Fakultas',
+    collection: 'Major',
     timestamps: true,
 });
 
-const Fakultas = mongoose.model('Fakultas', FakultasSchema);
+const Major = mongoose.model('Major', MajorSchema);
 
-export default Fakultas;
+export default Major;

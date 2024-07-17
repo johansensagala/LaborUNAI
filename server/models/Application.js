@@ -35,15 +35,15 @@ const JawabanSchema = new mongoose.Schema({
     },
 });
 
-const LamaranSchema = new mongoose.Schema({
+const ApplicationSchema = new mongoose.Schema({
     mahasiswaId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Mahasiswa',
+        ref: 'Student',
         required: true,
     },
     lowonganLaborId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'LowonganLabor',
+        ref: 'LaborJob',
         required: true,
     },
     keterampilan: {
@@ -62,7 +62,7 @@ const LamaranSchema = new mongoose.Schema({
     cv: {
         type: CvSchema,
     },
-    jawabanPertanyaanUmum: {
+    jawabanGeneralQuestion: {
         type: [JawabanSchema],
         default: [],
     },
@@ -87,10 +87,10 @@ const LamaranSchema = new mongoose.Schema({
         type: Date,
     },
 }, {
-    collection: 'Lamaran',
+    collection: 'Application',
     timestamps: true,
 });
 
-const Lamaran = mongoose.model('Lamaran', LamaranSchema);
+const Application = mongoose.model('Application', ApplicationSchema);
 
-export default Lamaran;
+export default Application;

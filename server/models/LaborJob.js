@@ -24,19 +24,19 @@ const PertanyaanSchema = new mongoose.Schema({
     },
 });
 
-const LowonganLaborSchema = new mongoose.Schema({
+const LaborJobSchema = new mongoose.Schema({
     posisi: {
         type: String,
         required: true,
     },
     departemenId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Departemen',
+        ref: 'Department',
         required: true,
     },
     penanggungJawab: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Dosen',
+        ref: 'Lecturer',
         required: true,
     },
     deskripsi: {
@@ -68,7 +68,7 @@ const LowonganLaborSchema = new mongoose.Schema({
         required: true,
         default: false,
     },
-    perluPertanyaanUmum: {
+    perluGeneralQuestion: {
         type: Boolean,
         required: true,
         default: false,
@@ -90,7 +90,7 @@ const LowonganLaborSchema = new mongoose.Schema({
     },
     pertanyaanUmum: {
         type: [String],
-        ref: 'PertanyaanUmum',
+        ref: 'GeneralQuestion',
     },
     pertanyaan: {
         type: [PertanyaanSchema],
@@ -104,10 +104,10 @@ const LowonganLaborSchema = new mongoose.Schema({
         type: Date,
     },
 }, {
-    collection: 'LowonganLabor',
+    collection: 'LaborJob',
     timestamps: true,
 });
 
-const LowonganLabor = mongoose.model('LowonganLabor', LowonganLaborSchema);
+const LaborJob = mongoose.model('LaborJob', LaborJobSchema);
 
-export default LowonganLabor;
+export default LaborJob;

@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
+import CvSchema from './Cv.js';
 
-const DosenSchema = new mongoose.Schema({
+const StudentSchema = new mongoose.Schema({
     nama: {
         type: String,
         required: true,
     },
-    nip: {
+    nim: {
         type: String,
         required: true,
     },
@@ -21,11 +22,26 @@ const DosenSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    bidangKeahlianId: {
+    jurusanId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'BidangKeahlian',
+        ref: 'Major',
         required: true,
     },
+    angkatan: {
+        type: String,
+        required: true,
+    },
+    keterampilan: {
+        type: [String],
+        required: true,
+    },
+    cv: {
+        type: CvSchema,
+    },
+    riwayatLabor: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'LaborHistory',
+    }],
     isDeleted: {
         type: Boolean,
         default: false,
@@ -35,10 +51,10 @@ const DosenSchema = new mongoose.Schema({
         type: Date,
     },
 }, {
-    collection: 'Dosen',
+    collection: 'Student',
     timestamps: true,
 });
 
-const Dosen = mongoose.model('Dosen', DosenSchema);
+const Student = mongoose.model('Student', StudentSchema);
 
-export default Dosen;
+export default Student;

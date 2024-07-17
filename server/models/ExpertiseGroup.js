@@ -1,15 +1,19 @@
 import mongoose from 'mongoose';
 
-const TestSchema = new mongoose.Schema({
-    lowonganLaborId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'LaborJob',
-        required: true,
-    },
-    pertanyaan: [{
+const ExpertiseGroupSchema = new mongoose.Schema({
+    namaBidang: {
         type: String,
         required: true,
-    }],
+    },
+    jurusanId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Major',
+        required: true,
+    },
+    deskripsi: {
+        type: String,
+        required: true,
+    },
     isDeleted: {
         type: Boolean,
         default: false,
@@ -19,10 +23,10 @@ const TestSchema = new mongoose.Schema({
         type: Date,
     },
 }, {
-    collection: 'Test',
+    collection: 'ExpertiseGroup',
     timestamps: true,
 });
 
-const Test = mongoose.model('Test', TestSchema);
+const ExpertiseGroup = mongoose.model('ExpertiseGroup', ExpertiseGroupSchema);
 
-export default Test;
+export default ExpertiseGroup;

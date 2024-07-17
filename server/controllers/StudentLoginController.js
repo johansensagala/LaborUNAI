@@ -1,18 +1,18 @@
-import Mahasiswa from '../models/Mahasiswa.js';
-import Jurusan from '../models/Jurusan.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Major from '../models/Major.js';
+import Student from '../models/Student.js';
 
 const loginMhs = async (req, res) => {
     try {
         const { nim, password } = req.body;
-        const mahasiswa = await Mahasiswa.findOne({ nim: nim });
+        const mahasiswa = await Student.findOne({ nim: nim });
 
         if (mahasiswa) {
             const passwordMatch = await bcrypt.compare(password, mahasiswa.password);
 
             if (passwordMatch) {
-                const jurusan = await Jurusan.findOne({ _id: mahasiswa.jurusanId });
+                const jurusan = await Major.findOne({ _id: mahasiswa.jurusanId });
                 
                 jwt.sign(
                     { id: mahasiswa._id,
@@ -20,7 +20,7 @@ const loginMhs = async (req, res) => {
                       nama: mahasiswa.nama,
                       noTelp: mahasiswa.noTelp,
                       email: mahasiswa.email,
-                      jurusan: jurusan.namaJurusan,
+                      jurusan: jurusan.namaMajor,
                       angkatan: mahasiswa.angkatan,
                       role: "mahasiswa"
                     }, process.env.JWT_SECRET, {}, (err, token) => {
@@ -64,4 +64,5 @@ const logoutMhs = (req, res) => {
     res.clearCookie('token', { path: '/', domain: 'localhost', secure: false }).json({ message: 'Logout berhasil' });
 };
 
-export { loginMhs, getMhs, logoutMhs };
+export { getMhs, loginMhs, logoutMhs };
+

@@ -1,17 +1,17 @@
 import mongoose from 'mongoose';
 
-const BidangKeahlianSchema = new mongoose.Schema({
-    namaBidang: {
+const DepartmentSchema = new mongoose.Schema({
+    namaDepartment: {
         type: String,
-        required: true,
-    },
-    jurusanId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Jurusan',
         required: true,
     },
     deskripsi: {
         type: String,
+        required: true,
+    },
+    kepalaDepartmentId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Lecturer',
         required: true,
     },
     isDeleted: {
@@ -23,10 +23,10 @@ const BidangKeahlianSchema = new mongoose.Schema({
         type: Date,
     },
 }, {
-    collection: 'BidangKeahlian',
+    collection: 'Department',
     timestamps: true,
 });
 
-const BidangKeahlian = mongoose.model('BidangKeahlian', BidangKeahlianSchema);
+const Department = mongoose.model('Department', DepartmentSchema);
 
-export default BidangKeahlian;
+export default Department;

@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
-import Navbar from '../../layouts/Navbar';
-import { MahasiswaContext } from '../../context/MahasiswaContext';
-import Swal from "sweetalert2";
 import axios from "axios";
+import React, { useContext, useEffect, useState } from 'react';
+import Swal from "sweetalert2";
+import { MahasiswaContext } from '../../context/MahasiswaContext';
+import Navbar from '../../layouts/Navbar';
 
 const Profil = () => {
   const { mahasiswa } = useContext(MahasiswaContext);
@@ -235,7 +235,7 @@ const Profil = () => {
                   </div>
                   <div className="my-2">
                     <div className="is-uppercase has-text-gray has-text-weight-bold is-size-6">
-                      Jurusan
+                      Major
                     </div>
                     <div className="is-size-6">
                       {mahasiswa.jurusan}

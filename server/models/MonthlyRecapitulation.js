@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const RekapitulasiBulananSchema = new mongoose.Schema({
+const MonthlyRecapitulationSchema = new mongoose.Schema({
     tanggalAwal: {
         type: Date,
         required: true,
@@ -30,10 +30,10 @@ const RekapitulasiBulananSchema = new mongoose.Schema({
         type: Date,
     },
 }, {
-    collection: 'RekapitulasiBulanan',
+    collection: 'MonthlyRecapitulation',
     timestamps: true,
 });
 
-const RekapitulasiBulanan = mongoose.model('RekapitulasiBulanan', RekapitulasiBulananSchema);
+const MonthlyRecapitulation = mongoose.model('MonthlyRecapitulation', MonthlyRecapitulationSchema);
 
-export default RekapitulasiBulanan;
+export default MonthlyRecapitulation;

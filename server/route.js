@@ -1,20 +1,20 @@
 // routes.js
-import express from 'express';
 import cors from 'cors';
+import express from 'express';
 import multer from 'multer';
 import path from 'path';
 
-import { getAllMahasiswa, saveMahasiswa, getKeterampilan, updateKeterampilan, getCv, uploadCv, sendCv, deleteCv } from './controllers/MahasiswaController.js';
-import { getAllJurusan, saveJurusan } from './controllers/JurusanController.js';
-import { getAllPertanyaanUmum, savePertanyaanUmum, saveManyPertanyaanUmum } from './controllers/PertanyaanUmumController.js';
-import { getAllFakultas, saveFakultas } from './controllers/FakultasController.js';
-import { getAllBidangKeahlian, saveBidangKeahlian } from './controllers/BidangKeahlianController.js';
-import { getAllDosen, saveDosen } from './controllers/DosenController.js';
-import { getAllLowonganLabor, getLowonganLabor, getLowonganLaborByDosen, saveLowonganLabor, updateLowonganLabor } from './controllers/LowonganLaborController.js';
-import { getAllLamaran, getLamaran, getLamaranByMahasiswaAndLowonganLabor, saveLamaran, startLamar } from './controllers/LamaranController.js';
-import { getDepartemen, getDepartemenByDosen, saveDepartemen } from './controllers/DepartemenController.js';
-import { loginMhs, getMhs, logoutMhs } from './controllers/LoginMhsController.js';
-import { loginDosen, getDosen, logoutDosen } from './controllers/LoginDosenController.js';
+import { getAllApplication, getApplication, getApplicationByStudentAndLaborJob, saveApplication, startLamar } from './controllers/ApplicationController.js';
+import { getDepartment, getDepartmentByLecturer, saveDepartment } from './controllers/DepartmentController.js';
+import { getAllExpertiseGroup, saveExpertiseGroup } from './controllers/ExpertiseGroupController.js';
+import { getAllFaculty, saveFaculty } from './controllers/FacultyController.js';
+import { getAllGeneralQuestion, saveGeneralQuestion, saveManyGeneralQuestion } from './controllers/GeneralQuestionController.js';
+import { getAllLaborJob, getLaborJob, getLaborJobByLecturer, saveLaborJob, updateLaborJob } from './controllers/LaborJobController.js';
+import { getAllLecturer, saveLecturer } from './controllers/LecturerController.js';
+import { getLecturer, loginLecturer, logoutLecturer } from './controllers/LoginLecturerController.js';
+import { getMhs, loginMhs, logoutMhs } from './controllers/LoginMhsController.js';
+import { getAllMajor, saveMajor } from './controllers/MajorController.js';
+import { deleteCv, getAllStudent, getCv, getKeterampilan, saveStudent, sendCv, updateKeterampilan, uploadCv } from './controllers/StudentController.js';
 
 const router = express.Router();
 
@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
 });
 
 const uploadCvProfile = multer({ storage: storage });
-const uploadCvLamaran = multer({ storage: storage });
+const uploadCvApplication = multer({ storage: storage });
 const uploadAvatar = multer({ storage: storage });
 const uploadJawabanImage = multer({ storage: storage });
 const uploadPertanyaanImage = multer({ storage: storage });
@@ -43,62 +43,62 @@ router.get('/', (req, res) => {
 });
 
 router.route('/mahasiswas')
-  .get(getAllMahasiswa)
-  .post(saveMahasiswa);
+  .get(getAllStudent)
+  .post(saveStudent);
 
 router.route('/jurusan')
-  .get(getAllJurusan)
-  .post(saveJurusan);
+  .get(getAllMajor)
+  .post(saveMajor);
 
 router.route('/pertanyaan-umum')
-  .get(getAllPertanyaanUmum)
-  .post(savePertanyaanUmum);
+  .get(getAllGeneralQuestion)
+  .post(saveGeneralQuestion);
 
 router.route('/pertanyaan-umum/save-many')
-  .post(saveManyPertanyaanUmum);
+  .post(saveManyGeneralQuestion);
 
 router.route('/fakultas')
-  .get(getAllFakultas)
-  .post(saveFakultas);
+  .get(getAllFaculty)
+  .post(saveFaculty);
 
 router.route('/bidang-keahlian')
-  .get(getAllBidangKeahlian)
-  .post(saveBidangKeahlian);
+  .get(getAllExpertiseGroup)
+  .post(saveExpertiseGroup);
 
 router.route('/dosens')
-  .get(getAllDosen)
-  .post(saveDosen);
+  .get(getAllLecturer)
+  .post(saveLecturer);
 
 router.route('/lowongan-labor')
-  .get(getAllLowonganLabor)
-  .post(saveLowonganLabor);
+  .get(getAllLaborJob)
+  .post(saveLaborJob);
   
 router.route('/lowongan-labor/:id')
-  .get(getLowonganLabor)
-  .put(updateLowonganLabor);
+  .get(getLaborJob)
+  .put(updateLaborJob);
 
 router.route('/lamaran')
-  .get(getAllLamaran)
-  .post(saveLamaran);
+  .get(getAllApplication)
+  .post(saveApplication);
 
 router.route('/lamaran/:id')
-  .get(getLamaran);
+  .get(getApplication);
 
 router.route('/lamaran/:mahasiswaId/:lowonganLaborId')
-  .get(getLamaranByMahasiswaAndLowonganLabor)
+  .get(getApplicationByStudentAndLaborJob)
   .post(startLamar);
 
 router.route('/lowongan-labor/dosen/:id')
-  .get(getLowonganLaborByDosen);
+  .get(getLaborJobByLecturer);
   
 router.route('/departemen/:id')
-  .get(getDepartemen);
+  .get(getDepartment);
 
 router.route('/departemen/dosen/:id')
-  .get(getDepartemenByDosen);
+  .get(getDepartmentByLecturer);
 
 router.route('/departemen')
-  .post(saveDepartemen);
+  .post(saveDepartment);
 
 router.route('/mhs/login')
   .post(loginMhs);
@@ -110,13 +110,13 @@ router.route('/mhs/logout')
   .get(logoutMhs);
 
 router.route('/dosen/login')
-  .post(loginDosen);
+  .post(loginLecturer);
 
 router.route('/dosen')
-  .get(getDosen);
+  .get(getLecturer);
 
 router.route('/dosen/logout')
-  .get(logoutDosen);
+  .get(logoutLecturer);
 
 router.route('/mahasiswa/:id/get-skill')
   .get(getKeterampilan);

@@ -1,11 +1,11 @@
-import Dosen from '../models/Dosen.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Lecturer from '../models/Lecturer.js';
 
-const loginDosen = async (req, res) => {
+const loginLecturer = async (req, res) => {
     try {
         const { nip, password } = req.body;
-        const dosen = await Dosen.findOne({ nip: nip });
+        const dosen = await Lecturer.findOne({ nip: nip });
 
         if (dosen) {
             const passwordMatch = await bcrypt.compare(password, dosen.password);
@@ -38,7 +38,7 @@ const loginDosen = async (req, res) => {
     }
 }
 
-const getDosen = (req, res) => {
+const getLecturer = (req, res) => {
     const {token} = req.cookies;
 
     if (token) {
@@ -56,8 +56,9 @@ const getDosen = (req, res) => {
     }
 }
 
-const logoutDosen = (req, res) => {
+const logoutLecturer = (req, res) => {
     res.clearCookie('token').json({ message: 'Logout berhasil' });
 };
 
-export { loginDosen, getDosen, logoutDosen };
+export { getLecturer, loginLecturer, logoutLecturer };
+

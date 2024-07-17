@@ -1,20 +1,20 @@
-import Lamaran from "../models/Lamaran.js";
-import Mahasiswa from "../models/Mahasiswa.js";
+import Application from "../models/Application.js";
+import Student from "../models/Student.js";
 
-const getAllLamaran = async (req, res) => {
+const getAllApplication = async (req, res) => {
     try {
-        const lamarans = await Lamaran.find();
+        const lamarans = await Application.find();
         res.status(200).json(lamarans);
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
 }
 
-const getLamaran = async (req, res) => {
+const getApplication = async (req, res) => {
     try {
-        const lamaran = await Lamaran.findById(req.params.id);
+        const lamaran = await Application.findById(req.params.id);
         if (!lamaran) {
-            return res.status(404).json({ message: 'Lamaran tidak ditemukan' });
+            return res.status(404).json({ message: 'Application tidak ditemukan' });
         }
         res.status(200).json(lamaran);
     } catch (error) {
@@ -22,13 +22,13 @@ const getLamaran = async (req, res) => {
     }
 }
 
-const getLamaranByMahasiswaAndLowonganLabor = async (req, res) => {
+const getApplicationByStudentAndLaborJob = async (req, res) => {
     const { mahasiswaId, lowonganLaborId } = req.params;
 
     try {
-        const lamaran = await Lamaran.findOne({ mahasiswaId, lowonganLaborId });
+        const lamaran = await Application.findOne({ mahasiswaId, lowonganLaborId });
         if (!lamaran) {
-            return res.status(404).json({ message: 'Lamaran tidak ditemukan' });
+            return res.status(404).json({ message: 'Application tidak ditemukan' });
         }
         res.status(200).json(lamaran);
     } catch (error) {
@@ -36,10 +36,10 @@ const getLamaranByMahasiswaAndLowonganLabor = async (req, res) => {
     }
 }
 
-const saveLamaran = async (req, res) => {
+const saveApplication = async (req, res) => {
     const { mahasiswaId, lowonganLaborId, keterampilan, catatanSingkat, status, tanggalKirim } = req.body;
 
-    const lamaran = new Lamaran({
+    const lamaran = new Application({
         mahasiswaId,
         lowonganLaborId,
         keterampilan,
@@ -49,8 +49,8 @@ const saveLamaran = async (req, res) => {
     });
 
     try {
-        const insertLamaran = await lamaran.save();
-        res.status(201).json(insertLamaran);
+        const insertApplication = await lamaran.save();
+        res.status(201).json(insertApplication);
     } catch (e) {
         res.status(400).json({ message: e.message });
     }
@@ -64,24 +64,25 @@ const startLamar = async (req, res) => {
     }
 
     try {
-        const mahasiswa = await Mahasiswa.findById(mahasiswaId);
+        const mahasiswa = await Student.findById(mahasiswaId);
         if (!mahasiswa) {
-            return res.status(404).json({ message: "Mahasiswa tidak ditemukan." });
+            return res.status(404).json({ message: "Student tidak ditemukan." });
         }
 
         const keterampilan = mahasiswa.keterampilan || "";
 
-        const lamaran = new Lamaran({
+        const lamaran = new Application({
             mahasiswaId,
             lowonganLaborId,
             keterampilan,
         });
 
-        const insertLamaran = await lamaran.save();
-        res.status(201).json(insertLamaran);
+        const insertApplication = await lamaran.save();
+        res.status(201).json(insertApplication);
     } catch (e) {
         res.status(400).json({ message: e.message });
     }
 }
 
-export { getAllLamaran, getLamaran, saveLamaran, startLamar };
+export { getAllApplication, getApplication, saveApplication, startLamar };
+

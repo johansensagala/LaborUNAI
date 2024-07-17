@@ -1,15 +1,14 @@
 import mongoose from 'mongoose';
 
-const HasilTesSchema = new mongoose.Schema({
-    lamaranId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Lamaran',
-        required: true,
-    },
-    jawaban: [{
+const FacultySchema = new mongoose.Schema({
+    namaFaculty: {
         type: String,
         required: true,
-    }],
+    },
+    deskripsi: {
+        type: String,
+        required: true,
+    },
     isDeleted: {
         type: Boolean,
         default: false,
@@ -19,10 +18,10 @@ const HasilTesSchema = new mongoose.Schema({
         type: Date,
     },
 }, {
-    collection: 'HasilTes',
+    collection: 'Faculty',
     timestamps: true,
 });
 
-const HasilTes = mongoose.model('HasilTes', HasilTesSchema);
+const Faculty = mongoose.model('Faculty', FacultySchema);
 
-export default HasilTes;
+export default Faculty;

@@ -1,17 +1,20 @@
 import mongoose from 'mongoose';
 
-const DepartemenSchema = new mongoose.Schema({
-    namaDepartemen: {
+const GeneralQuestionSchema = new mongoose.Schema({
+    pertanyaan: {
         type: String,
         required: true,
     },
-    deskripsi: {
+    kode: {
         type: String,
         required: true,
     },
-    kepalaDepartemenId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Dosen',
+    type: {
+        type: String,
+        required: true,
+    },
+    tujuan: {
+        type: String,
         required: true,
     },
     isDeleted: {
@@ -23,10 +26,10 @@ const DepartemenSchema = new mongoose.Schema({
         type: Date,
     },
 }, {
-    collection: 'Departemen',
+    collection: 'GeneralQuestion',
     timestamps: true,
 });
 
-const Departemen = mongoose.model('Departemen', DepartemenSchema);
+const GeneralQuestion = mongoose.model('GeneralQuestion', GeneralQuestionSchema);
 
-export default Departemen;
+export default GeneralQuestion;
