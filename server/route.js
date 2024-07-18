@@ -11,10 +11,10 @@ import { getAllFaculty, saveFaculty } from './controllers/FacultyController.js';
 import { getAllGeneralQuestion, saveGeneralQuestion, saveManyGeneralQuestion } from './controllers/GeneralQuestionController.js';
 import { getAllLaborJob, getLaborJob, getLaborJobByLecturer, saveLaborJob, updateLaborJob } from './controllers/LaborJobController.js';
 import { getAllLecturer, saveLecturer } from './controllers/LecturerController.js';
-import { getLecturer, loginLecturer, logoutLecturer } from './controllers/LoginLecturerController.js';
-import { getMhs, loginMhs, logoutMhs } from './controllers/LoginMhsController.js';
+import { getLecturer, loginLecturer, logoutLecturer } from './controllers/LecturerLoginController.js';
+import { getStudent, loginStudent, logoutStudent } from './controllers/StudentLoginController.js';
 import { getAllMajor, saveMajor } from './controllers/MajorController.js';
-import { deleteCv, getAllStudent, getCv, getKeterampilan, saveStudent, sendCv, updateKeterampilan, uploadCv } from './controllers/StudentController.js';
+import { deleteCv, getAllStudent, getCv, getSkill, saveStudent, sendCv, updateSkill, uploadCv } from './controllers/StudentController.js';
 
 const router = express.Router();
 
@@ -101,13 +101,13 @@ router.route('/departemen')
   .post(saveDepartment);
 
 router.route('/mhs/login')
-  .post(loginMhs);
+  .post(loginStudent);
 
 router.route('/mhs')
-  .get(getMhs);
+  .get(getStudent);
 
 router.route('/mhs/logout')
-  .get(logoutMhs);
+  .get(logoutStudent);
 
 router.route('/dosen/login')
   .post(loginLecturer);
@@ -119,10 +119,10 @@ router.route('/dosen/logout')
   .get(logoutLecturer);
 
 router.route('/mahasiswa/:id/get-skill')
-  .get(getKeterampilan);
+  .get(getSkill);
 
 router.route('/mahasiswa/:id/update-skill')
-  .put(updateKeterampilan);
+  .put(updateSkill);
 
 router.route('/cv/:id/get')
   .get(getCv);

@@ -4,66 +4,66 @@ import Student from "../models/Student.js";
 
 const getAllStudent = async (req, res) => {
     try {
-        const mahasiswas = await Student.find();
-        res.status(200).json(mahasiswas);
+        const students = await Student.find();
+        res.status(200).json(students);
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
 }
 
 const saveStudent = async (req, res) => {
-    const { nama, nim, password, email, noTelp, jurusanId, angkatan, keterampilan } = req.body;
+    const { name, nim, password, email, phoneNumber, major, cohort, skills } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const mahasiswa = new Student({
-        nama,
+    const student = new Student({
+        name,
         nim,
         password: hashedPassword,
         email,
-        noTelp,
-        jurusanId,
-        angkatan,
-        keterampilan,
+        phoneNumber,
+        major,
+        cohort,
+        skills,
     });
 
     try {
-        const insertStudent = await mahasiswa.save();
+        const insertStudent = await student.save();
         res.status(201).json(insertStudent);
     } catch (e) {
         res.status(400).json({ message: e.message });
     }
 }
 
-const getKeterampilan = async (req, res) => {
+const getSkill = async (req, res) => {
     try {
         const { id } = req.params;
-        const mahasiswa = await Student.findById(id);
+        const student = await Student.findById(id);
 
-        if (!mahasiswa) {
-            return res.status(404).json({ message: "Student tidak ditemukan." });
+        if (!student) {
+            return res.status(404).json({ message: "Student not found." });
         }
 
-        const keterampilan = mahasiswa.keterampilan || [];
+        const skills = student.skills || [];
 
-        res.status(200).json(keterampilan);
+        res.status(200).json(skills);
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
 }
 
-const updateKeterampilan = async (req, res) => {
+const updateSkill = async (req, res) => {
     try {
         const { id } = req.params;
         const skill = req.body.newSkill;
 
-        const updatedKeterampilan = await Student.findByIdAndUpdate(
+        const updatedSkill = await Student.findByIdAndUpdate(
             id,
-            { $set: { keterampilan: skill } },
+            { $set: { skills: skill } },
             { new: true }
         );
 
-        res.status(200).json(updatedKeterampilan);
+        res.status(200).json(updatedSkill);
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
@@ -72,13 +72,13 @@ const updateKeterampilan = async (req, res) => {
 const getCv = async (req, res) => {
     try {
         const { id } = req.params;
-        const mahasiswa = await Student.findById(id);
+        const student = await Student.findById(id);
 
-        if (!mahasiswa) {
-            return res.status(404).json({ message: "Student tidak ditemukan." });
+        if (!student) {
+            return res.status(404).json({ message: "Student not found." });
         }
 
-        const cv = mahasiswa.cv && mahasiswa.cv.fileName ? "public/cv/" + mahasiswa.cv.fileName : null;
+        const cv = student.cv && student.cv.fileName ? "public/cv/" + student.cv.fileName : null;
 
         res.status(200).json(cv);
     } catch (e) {
@@ -96,19 +96,19 @@ const uploadCv = async (req, res, next) => {
         const cv = req.file;
         const { originalname, mimetype, size, filename } = cv;
 
-        const mahasiswa = await Student.findById(id);
+        const student = await Student.findById(id);
 
-        if (!mahasiswa) {
+        if (!student) {
             return res.status(404).json({ message: 'Student not found' });
         }
 
-        if (mahasiswa.cv) {
-            mahasiswa.cv.originalName = originalname;
-            mahasiswa.cv.mimeType = mimetype;
-            mahasiswa.cv.size = size;
-            mahasiswa.cv.fileName = filename;
+        if (student.cv) {
+            student.cv.originalName = originalname;
+            student.cv.mimeType = mimetype;
+            student.cv.size = size;
+            student.cv.fileName = filename;
         } else {
-            mahasiswa.cv = {
+            student.cv = {
                 originalName: originalname,
                 mimeType: mimetype,
                 size: size,
@@ -116,9 +116,9 @@ const uploadCv = async (req, res, next) => {
             };
         }
 
-        const updatedStudent = await mahasiswa.save();
+        const updatedStudent = await student.save();
 
-        res.status(200).json({ message: 'Upload success!', updatedStudent });
+        res.status(200).json({ message: 'Upload success.', updatedStudent });
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
@@ -140,20 +140,20 @@ const sendCv = async (req, res) => {
 const deleteCv = async (req, res) => {
     try {
         const { id } = req.params;
-        const mahasiswa = await Student.findById(id);
+        const student = await Student.findById(id);
 
-        if (!mahasiswa) {
-            return res.status(404).json({ message: "Student tidak ditemukan." });
+        if (!student) {
+            return res.status(404).json({ message: "Student not found." });
         }
 
-        mahasiswa.cv = undefined;
-        await mahasiswa.save();
+        student.cv = undefined;
+        await student.save();
 
-        res.status(200).json({ message: "CV berhasil dihapus." });
+        res.status(200).json({ message: "CV deleted." });
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
 }
 
-export { deleteCv, getAllStudent, getCv, getKeterampilan, saveStudent, sendCv, updateKeterampilan, uploadCv };
+export { deleteCv, getAllStudent, getCv, getSkill, saveStudent, sendCv, updateSkill, uploadCv };
 

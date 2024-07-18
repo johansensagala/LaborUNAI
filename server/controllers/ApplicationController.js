@@ -3,8 +3,8 @@ import Student from "../models/Student.js";
 
 const getAllApplication = async (req, res) => {
     try {
-        const lamarans = await Application.find();
-        res.status(200).json(lamarans);
+        const applications = await Application.find();
+        res.status(200).json(applications);
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
@@ -12,77 +12,77 @@ const getAllApplication = async (req, res) => {
 
 const getApplication = async (req, res) => {
     try {
-        const lamaran = await Application.findById(req.params.id);
-        if (!lamaran) {
-            return res.status(404).json({ message: 'Application tidak ditemukan' });
+        const application = await Application.findById(req.params.id);
+        if (!application) {
+            return res.status(404).json({ message: 'Application not found' });
         }
-        res.status(200).json(lamaran);
+        res.status(200).json(application);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
 
 const getApplicationByStudentAndLaborJob = async (req, res) => {
-    const { mahasiswaId, lowonganLaborId } = req.params;
+    const { studentId, laborJobId } = req.params;
 
     try {
-        const lamaran = await Application.findOne({ mahasiswaId, lowonganLaborId });
-        if (!lamaran) {
-            return res.status(404).json({ message: 'Application tidak ditemukan' });
+        const application = await Application.findOne({ studentId, laborJobId });
+        if (!application) {
+            return res.status(404).json({ message: 'Application not found' });
         }
-        res.status(200).json(lamaran);
+        res.status(200).json(application);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
 
 const saveApplication = async (req, res) => {
-    const { mahasiswaId, lowonganLaborId, keterampilan, catatanSingkat, status, tanggalKirim } = req.body;
+    const { studentId, laborJobId, skills, note, status, sentDate } = req.body;
 
-    const lamaran = new Application({
-        mahasiswaId,
-        lowonganLaborId,
-        keterampilan,
-        catatanSingkat,
+    const application = new Application({
+        studentId,
+        laborJobId,
+        skills,
+        note,
         status,
-        tanggalKirim,
+        sentDate,
     });
 
     try {
-        const insertApplication = await lamaran.save();
+        const insertApplication = await application.save();
         res.status(201).json(insertApplication);
     } catch (e) {
         res.status(400).json({ message: e.message });
     }
 }
 
-const startLamar = async (req, res) => {
-    const { mahasiswaId, lowonganLaborId } = req.params;
+const startApply = async (req, res) => {
+    const { studentId, laborJobId } = req.params;
 
-    if (!mahasiswaId || !lowonganLaborId) {
-        return res.status(400).json({ message: "Mohon lengkapi mahasiswaId dan lowonganLaborId." });
+    if (!studentId || !laborJobId) {
+        return res.status(400).json({ message: "Please fullfill studentId and laborJobId." });
     }
 
     try {
-        const mahasiswa = await Student.findById(mahasiswaId);
-        if (!mahasiswa) {
-            return res.status(404).json({ message: "Student tidak ditemukan." });
+        const student = await Student.findById(studentId);
+        if (!student) {
+            return res.status(404).json({ message: "Student not found." });
         }
 
-        const keterampilan = mahasiswa.keterampilan || "";
+        const skills = student.skills || "";
 
-        const lamaran = new Application({
-            mahasiswaId,
-            lowonganLaborId,
-            keterampilan,
+        const application = new Application({
+            studentId,
+            laborJobId,
+            skills,
         });
 
-        const insertApplication = await lamaran.save();
+        const insertApplication = await application.save();
         res.status(201).json(insertApplication);
     } catch (e) {
         res.status(400).json({ message: e.message });
     }
 }
 
-export { getAllApplication, getApplication, saveApplication, startLamar };
+export { getAllApplication, getApplication, saveApplication, startApply };
 

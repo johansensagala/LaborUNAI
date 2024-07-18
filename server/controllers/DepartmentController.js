@@ -2,12 +2,12 @@ import Department from "../models/Department.js";
 
 const getDepartment = async (req, res) => {
     try {
-        const departemen = await Department.findById(req.params.id);
-        if (!departemen) {
-            return res.status(404).json({ message: 'Department tidak ditemukan' });
+        const department = await Department.findById(req.params.id);
+        if (!department) {
+            return res.status(404).json({ message: 'Department not found.' });
         }
 
-        res.status(200).json(departemen);
+        res.status(200).json(department);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -15,13 +15,13 @@ const getDepartment = async (req, res) => {
 
 const getDepartmentByLecturer = async (req, res) => {
     try {        
-        const departemen = await Department.find({ kepalaDepartmentId: req.params.id });
+        const department = await Department.find({ headOfDepartment: req.params.id });
         
-        if (!departemen || departemen.length === 0) {
-            return res.status(404).json({ message: "Tidak ada departemen." });
+        if (!department || department.length === 0) {
+            return res.status(404).json({ message: "Department not found." });
         }
 
-        res.status(200).json(departemen);
+        res.status(200).json(department);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

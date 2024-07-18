@@ -3,26 +3,26 @@ import jwt from 'jsonwebtoken';
 import Major from '../models/Major.js';
 import Student from '../models/Student.js';
 
-const loginMhs = async (req, res) => {
+const loginStudent = async (req, res) => {
     try {
         const { nim, password } = req.body;
-        const mahasiswa = await Student.findOne({ nim: nim });
+        const student = await Student.findOne({ nim: nim });
 
-        if (mahasiswa) {
-            const passwordMatch = await bcrypt.compare(password, mahasiswa.password);
+        if (student) {
+            const passwordMatch = await bcrypt.compare(password, student.password);
 
             if (passwordMatch) {
-                const jurusan = await Major.findOne({ _id: mahasiswa.jurusanId });
+                const major = await Major.findOne({ _id: student.major });
                 
                 jwt.sign(
-                    { id: mahasiswa._id,
-                      nim: mahasiswa.nim,
-                      nama: mahasiswa.nama,
-                      noTelp: mahasiswa.noTelp,
-                      email: mahasiswa.email,
-                      jurusan: jurusan.namaMajor,
-                      angkatan: mahasiswa.angkatan,
-                      role: "mahasiswa"
+                    { id: student._id,
+                      nim: student.nim,
+                      name: student.name,
+                      phoneNumber: student.phoneNumber,
+                      email: student.email,
+                      major: major.majorName,
+                      cohort: student.cohort,
+                      role: "student"
                     }, process.env.JWT_SECRET, {}, (err, token) => {
                     if (err) {
                         res.status(500).json({ message: 'Failed to generate token.' });
@@ -30,7 +30,7 @@ const loginMhs = async (req, res) => {
                         const oneDay = 24 * 60 * 60 * 1000;
                         const expirationDate = new Date(Date.now() + oneDay);
 
-                        res.cookie('token', token, { expires: expirationDate, httpOnly: true }).json({ token, mahasiswa });
+                        res.cookie('token', token, { expires: expirationDate, httpOnly: true }).json({ token, student });
                     }
                 });
             } else {
@@ -44,25 +44,25 @@ const loginMhs = async (req, res) => {
     }
 }
 
-const getMhs = (req, res) => {
+const getStudent = (req, res) => {
     const {token} = req.cookies;
 
     if (token) {
-        jwt.verify(token, process.env.JWT_SECRET, {}, (err, mahasiswa) => {
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, student) => {
             if (err) {
                 throw err;
             } else {
-                res.json(mahasiswa);
+                res.json(student);
             }
         })
     } else {
-        res.json("tidak ada mahasiswa");
+        res.json("No student found.");
     }
 }
 
-const logoutMhs = (req, res) => {
-    res.clearCookie('token', { path: '/', domain: 'localhost', secure: false }).json({ message: 'Logout berhasil' });
+const logoutStudent = (req, res) => {
+    res.clearCookie('token', { path: '/', domain: 'localhost', secure: false }).json({ message: 'Logout succesfully.' });
 };
 
-export { getMhs, loginMhs, logoutMhs };
+export { getStudent, loginStudent, logoutStudent };
 

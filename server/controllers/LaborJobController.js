@@ -2,8 +2,8 @@ import LaborJob from "../models/LaborJob.js";
 
 const getAllLaborJob = async (req, res) => {
     try {
-        const lowonganLabors = await LaborJob.find();
-        res.status(200).json(lowonganLabors);
+        const laborJobs = await LaborJob.find();
+        res.status(200).json(laborJobs);
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
@@ -11,11 +11,11 @@ const getAllLaborJob = async (req, res) => {
 
 const getLaborJob = async (req, res) => {
     try {
-        const lowonganLabor = await LaborJob.findById(req.params.id);
-        if (!lowonganLabor) {
-            return res.status(404).json({ message: 'Lowongan Labor tidak ditemukan' });
+        const laborJob = await LaborJob.findById(req.params.id);
+        if (!laborJob) {
+            return res.status(404).json({ message: 'Labor Job not found.' });
         }
-        res.status(200).json(lowonganLabor);
+        res.status(200).json(laborJob);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -23,50 +23,60 @@ const getLaborJob = async (req, res) => {
 
 const getLaborJobByLecturer = async (req, res) => {
     try {
-        const lowonganLabor = await LaborJob.find({ penanggungJawab: req.params.id });
-        if (!lowonganLabor || lowonganLabor.length === 0) {
-            return res.status(404).json({ message: 'Lowongan Labor tidak ditemukan' });
+        const laborJob = await LaborJob.find({ recruiter: req.params.id });
+        if (!laborJob || laborJob.length === 0) {
+            return res.status(404).json({ message: 'Labor Job not found.' });
         }
-        res.status(200).json(lowonganLabor);
+        res.status(200).json(laborJob);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
 
 const saveLaborJob = async (req, res) => {
-    const { posisi, departemenId, penanggungJawab, deskripsi, tanggungJawab, persyaratan, gaji, tanggalPosting, tanggalTenggat, UploadCv, pertanyaanUmum, pertanyaan } = req.body;
+    const { position, 
+        department, 
+        recruiter, 
+        description, 
+        responsibilities, 
+        requirements, 
+        salary, 
+        postDate, 
+        deadline, 
+        needCvUpload, 
+        generalQuestion, 
+        question } = req.body;
 
-    let perluGeneralQuestion = false;
-    let perluTest = false;
+    let needGeneralQuestion = false;
+    let needTest = false;
 
-    if (pertanyaanUmum && pertanyaanUmum.length > 0) {
-        perluGeneralQuestion = true;
+    if (generalQuestion && generalQuestion.length > 0) {
+        needGeneralQuestion = true;
     }
 
-    if (pertanyaan && pertanyaan.length > 0) {
-        perluTest = true;
+    if (question && question.length > 0) {
+        needTest = true;
     }
 
-    const lowonganLabor = new LaborJob({
-        posisi,
-        departemenId,
-        penanggungJawab,
-        deskripsi,
-        tanggungJawab,
-        persyaratan,
-        gaji,
-        tanggalPosting,
-        tanggalTenggat,
-        perluUploadCv,
-        perluGeneralQuestion,
-        perluTest,
-        UploadCv,
-        pertanyaanUmum,
-        pertanyaan
+    const laborJob = new LaborJob({
+        position,
+        department,
+        recruiter,
+        description,
+        responsibilities,
+        requirements,
+        salary,
+        postDate,
+        deadline,
+        needCvUpload,
+        needGeneralQuestion,
+        needTest,
+        generalQuestion,
+        question
     });
 
     try {
-        const insertLaborJob = await lowonganLabor.save();
+        const insertLaborJob = await laborJob.save();
         res.status(201).json(insertLaborJob);
     } catch (e) {
         res.status(400).json({ message: e.message });
@@ -77,7 +87,7 @@ const updateLaborJob = async (req, res) => {
     try {
         const updatedLaborJob = await LaborJob.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!updatedLaborJob) {
-            return res.status(404).json({ message: 'Lowongan Labor tidak ditemukan' });
+            return res.status(404).json({ message: 'Labor Job not found.' });
         }
         res.status(200).json(updatedLaborJob);
     } catch (e) {

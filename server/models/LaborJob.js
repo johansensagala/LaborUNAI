@@ -43,7 +43,7 @@ const LaborJobSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    responsibility: {
+    responsibilities: {
         type: [String],
         required: true,
     },
