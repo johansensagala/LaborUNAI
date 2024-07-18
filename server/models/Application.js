@@ -12,46 +12,43 @@ const STATUS_OFFER_DECLINED = "OFFER_DECLINED";
 const STATUS_WITHDRAWN = "WITHDRAWN";
 const STATUS_NOT_SELECTED = "NOT_SELECTED";
 
-const CATATAN_SINGKAT_DEFAULT_OPTION_1 = "Hi, i am interested with this job";
-const CATATAN_SINGKAT_DEFAULT_OPTION_2 = "Hai, saya tertarik dengan pekerjaan ini.";
-const CATATAN_SINGKAT_DEFAULT_OPTION_3 = "Dear Sir/Mam, saya sangat tertarik dengan pekerjaan ini dan saya rasa saya memiliki skill dan passion yang cukup berhubungan dengan lowongan labor ini";
-const CATATAN_SINGKAT_DEFAULT_OPTION_4 = "Interested";
+const DEFAULT_NOTES_OPTION_1 = "Hi, i am interested with this job";
+const DEFAULT_NOTES_OPTION_2 = "Hai, saya tertarik dengan pekerjaan ini.";
+const DEFAULT_NOTES_OPTION_3 = "Dear Sir/Mam, saya sangat tertarik dengan pekerjaan ini dan saya rasa saya memiliki skill dan passion yang cukup berhubungan dengan lowongan labor ini";
+const DEFAULT_NOTES_OPTION_4 = "Interested";
 
-const JawabanSchema = new mongoose.Schema({
-    nomor: {
+const AnswerSchema = new mongoose.Schema({
+    number: {
         type: Number,
     },
-    inputPertanyaan: {
+    textAnswer: {
         type: String,
     },
-    jenisPertanyaan: {
+    radioAnswer: {
         type: String,
     },
-    optionPertanyaanRadio: {
-        type: String,
-    },
-    optionPertanyaanCheckbox: {
+    checkboxAnswer: {
         type: [String],
     },
 });
 
 const ApplicationSchema = new mongoose.Schema({
-    mahasiswaId: {
+    student: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Student',
         required: true,
     },
-    lowonganLaborId: {
+    laborJob: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'LaborJob',
         required: true,
     },
-    keterampilan: {
+    skills: {
         type: [String],
         required: true,
         default: [],
     },
-    catatanSingkat: {
+    note: {
         type: String,
     },
     status: {
@@ -62,15 +59,15 @@ const ApplicationSchema = new mongoose.Schema({
     cv: {
         type: CvSchema,
     },
-    jawabanGeneralQuestion: {
-        type: [JawabanSchema],
+    generalQuestionAnswer: {
+        type: [AnswerSchema],
         default: [],
     },
-    jawaban: {
-        type: [JawabanSchema],
+    testAnswer: {
+        type: [AnswerSchema],
         default: [],
     },
-    tanggalKirim: {
+    sentDate: {
         type: Date,
         default: Date.now,
         required: true,

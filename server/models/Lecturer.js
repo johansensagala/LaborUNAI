@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const LecturerSchema = new mongoose.Schema({
-    nama: {
+    name: {
         type: String,
         required: true,
     },
@@ -17,11 +17,11 @@ const LecturerSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    noTelp: {
+    phoneNumber: {
         type: String,
         required: true,
     },
-    bidangKeahlianId: {
+    expertiseGroup: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ExpertiseGroup',
         required: true,

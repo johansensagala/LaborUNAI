@@ -1,16 +1,16 @@
 import mongoose from 'mongoose';
 
 const ExpertiseGroupSchema = new mongoose.Schema({
-    namaBidang: {
+    expertiseName: {
         type: String,
         required: true,
     },
-    jurusanId: {
+    major: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Major',
         required: true,
     },
-    deskripsi: {
+    description: {
         type: String,
         required: true,
     },

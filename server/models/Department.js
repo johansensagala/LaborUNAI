@@ -1,15 +1,15 @@
 import mongoose from 'mongoose';
 
 const DepartmentSchema = new mongoose.Schema({
-    namaDepartment: {
+    departmentName: {
         type: String,
         required: true,
     },
-    deskripsi: {
+    description: {
         type: String,
         required: true,
     },
-    kepalaDepartmentId: {
+    headOfDepartment: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Lecturer',
         required: true,

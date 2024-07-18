@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import CvSchema from './Cv.js';
 
 const StudentSchema = new mongoose.Schema({
-    nama: {
+    name: {
         type: String,
         required: true,
     },
@@ -18,27 +18,27 @@ const StudentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    noTelp: {
+    phoneNumber: {
         type: String,
         required: true,
     },
-    jurusanId: {
+    major: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Major',
         required: true,
     },
-    angkatan: {
+    cohort: {
         type: String,
         required: true,
     },
-    keterampilan: {
+    skills: {
         type: [String],
         required: true,
     },
     cv: {
         type: CvSchema,
     },
-    riwayatLabor: [{
+    laborHistory: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'LaborHistory',
     }],

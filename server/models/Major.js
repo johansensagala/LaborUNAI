@@ -1,16 +1,16 @@
 import mongoose from 'mongoose';
 
 const MajorSchema = new mongoose.Schema({
-    namaMajor: {
+    majorName: {
         type: String,
         required: true,
     },
-    fakultasId: {
+    faculty: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Faculty',
         required: true,
     },
-    deskripsi: {
+    description: {
         type: String,
         required: true,
     },

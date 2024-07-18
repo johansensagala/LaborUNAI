@@ -1,99 +1,99 @@
 import mongoose from 'mongoose';
 
-const PertanyaanSchema = new mongoose.Schema({
-    nomor: {
+const QuestionSchema = new mongoose.Schema({
+    number: {
         type: Number,
     },
-    inputPertanyaan: {
+    question: {
         type: String,
     },
-    jenisPertanyaan: {
+    questionType: {
         type: String,
     },
-    jumlahPertanyaanRadio: {
+    numberOfQuestionRadio: {
         type: Number,
     },
-    jumlahPertanyaanCheckbox: {
+    numberOfQuestionCheckbox: {
         type: Number,
     },
-    optionPertanyaanRadio: {
+    optionsOfQuestionRadio: {
         type: [String],
     },
-    optionPertanyaanCheckbox: {
+    optionsOfQuestionCheckbox: {
         type: [String],
     },
 });
 
 const LaborJobSchema = new mongoose.Schema({
-    posisi: {
+    position: {
         type: String,
         required: true,
     },
-    departemenId: {
+    department: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Department',
         required: true,
     },
-    penanggungJawab: {
+    recruiter: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Lecturer',
         required: true,
     },
-    deskripsi: {
+    description: {
         type: String,
         required: true,
     },
-    tanggungJawab: {
+    responsibility: {
         type: [String],
         required: true,
     },
-    persyaratan: {
+    requirements: {
         type: [String],
         required: true,
     },
-    gaji: {
+    salary: {
         type: Number,
         required: true,
     },
-    tanggalPosting: {
+    postDate: {
         type: Date,
         required: true,
     },
-    tanggalTenggat: {
+    deadline: {
         type: Date,
         required: true,
     },
-    perluUploadCv: {
+    needCvUpload: {
         type: Boolean,
         required: true,
         default: false,
     },
-    perluGeneralQuestion: {
+    needGeneralQuestion: {
         type: Boolean,
         required: true,
         default: false,
     },
-    perluTest: {
+    needTest: {
         type: Boolean,
         required: true,
         default: false,
     },
-    perluCatatanSingkat: {
+    needNote: {
         type: Boolean,
         required: true,
         default: false,
     },
-    tersedia: {
+    available: {
         type: Boolean,
         default: true,
         required: true,
     },
-    pertanyaanUmum: {
+    generalQuestion: {
         type: [String],
         ref: 'GeneralQuestion',
     },
-    pertanyaan: {
-        type: [PertanyaanSchema],
+    questions: {
+        type: [QuestionSchema],
     },
     isDeleted: {
         type: Boolean,

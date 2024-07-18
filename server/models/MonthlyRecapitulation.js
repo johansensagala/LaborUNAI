@@ -1,15 +1,15 @@
 import mongoose from 'mongoose';
 
 const MonthlyRecapitulationSchema = new mongoose.Schema({
-    tanggalAwal: {
+    startDate: {
         type: Date,
         required: true,
     },
-    tanggalAkhir: {
+    endDate: {
         type: Date,
         required: true,
     },
-    gaji: {
+    salary: {
         type: Number,
         required: true,
     },
@@ -17,7 +17,7 @@ const MonthlyRecapitulationSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    catatan: {
+    note: {
         type: String,
         required: false,
     },

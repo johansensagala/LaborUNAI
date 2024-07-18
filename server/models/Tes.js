@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 
 const TestSchema = new mongoose.Schema({
-    lowonganLaborId: {
+    laborJob: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'LaborJob',
         required: true,
     },
-    pertanyaan: [{
+    question: [{
         type: String,
         required: true,
     }],

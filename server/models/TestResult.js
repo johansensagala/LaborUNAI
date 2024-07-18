@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 
-const TesttResultSchema = new mongoose.Schema({
-    lamaranId: {
+const TestResultSchema = new mongoose.Schema({
+    application: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Application',
         required: true,
     },
-    jawaban: [{
+    answer: [{
         type: String,
         required: true,
     }],
@@ -19,10 +19,10 @@ const TesttResultSchema = new mongoose.Schema({
         type: Date,
     },
 }, {
-    collection: 'TesttResult',
+    collection: 'TestResult',
     timestamps: true,
 });
 
-const TesttResult = mongoose.model('TesttResult', TesttResultSchema);
+const TestResult = mongoose.model('TestResult', TestResultSchema);
 
-export default TesttResult;
+export default TestResult;

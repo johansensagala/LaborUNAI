@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 
 const GeneralQuestionSchema = new mongoose.Schema({
-    pertanyaan: {
+    question: {
         type: String,
         required: true,
     },
-    kode: {
+    code: {
         type: String,
         required: true,
     },
@@ -13,7 +13,7 @@ const GeneralQuestionSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    tujuan: {
+    purpose: {
         type: String,
         required: true,
     },

@@ -1,20 +1,20 @@
 import mongoose from 'mongoose';
 
 const LaborHistorySchema = new mongoose.Schema({
-    laborId: {
+    labor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Labor',
         required: true,
     },
-    tanggalMulai: {
+    startDate: {
         type: Date,
         required: true,
     },
-    tanggalSelesai: {
+    endDate: {
         type: Date,
         required: true,
     },
-    rekapitulasiBulanan: [{
+    monthlyRecapitulation: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'MonthlyRecapitulation',
     }],
