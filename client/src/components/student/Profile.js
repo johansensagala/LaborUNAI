@@ -1,11 +1,11 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from 'react';
 import Swal from "sweetalert2";
-import { MahasiswaContext } from '../../context/MahasiswaContext';
+import { StudentContext } from '../../context/StudentContext';
 import Navbar from '../../layouts/Navbar';
 
 const Profil = () => {
-  const { mahasiswa } = useContext(MahasiswaContext);
+  const { student } = useContext(StudentContext);
   const [showModal, setShowModal] = useState(false);
   const [skill, setSkill] = useState([]);
   const [newSkill, setNewSkill] = useState([]);
@@ -15,14 +15,14 @@ const Profil = () => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
-    fetchKeterampilan();
+    fetchSkill();
     fetchCv();
-  }, [mahasiswa]);
+  }, [student]);
 
   const fetchCv = async () => {
     try {
-      if (mahasiswa) {
-        const response = await axios.get(`http://localhost:5000/cv/${mahasiswa.id}/get`);
+      if (student) {
+        const response = await axios.get(`http://localhost:5000/cv/${student.id}/get`);
 
         if (response) {
           setCv(response.data);
@@ -34,10 +34,10 @@ const Profil = () => {
     }
   };
 
-  const fetchKeterampilan = async () => {
+  const fetchSkill = async () => {
     try {
-      if (mahasiswa) {
-        const response = await axios.get(`http://localhost:5000/mahasiswa/${mahasiswa.id}/get-skill`);
+      if (student) {
+        const response = await axios.get(`http://localhost:5000/student/${student.id}/get-skill`);
         setSkill(response.data);
         setNewSkill(response.data);
       }
@@ -75,7 +75,7 @@ const Profil = () => {
     formData.append('cv', selectedFile);
 
     try {
-      await axios.put(`http://localhost:5000/cv/${mahasiswa.id}/upload`, formData, {
+      await axios.put(`http://localhost:5000/cv/${student.id}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -104,7 +104,7 @@ const Profil = () => {
       });
 
       if (result.isConfirmed) {
-        await axios.delete(`http://localhost:5000/cv/${mahasiswa.id}/delete`);
+        await axios.delete(`http://localhost:5000/cv/${student.id}/delete`);
 
         Swal.fire('Sukses', 'CV berhasil dihapus.', 'success');
         setCv(null);
@@ -138,13 +138,13 @@ const Profil = () => {
     }
   };
 
-  const handleDeleteKeterampilan = (index) => {
+  const handleDeleteSkill = (index) => {
     const updatedSkill = [...newSkill];
     updatedSkill.splice(index, 1);
     setNewSkill(updatedSkill);
   };
 
-  const handleTambahKeterampilan = () => {
+  const handleAddSkill = () => {
     Swal.fire({
       title: 'Masukkan keterampilan Anda:',
       input: 'text',
@@ -171,9 +171,9 @@ const Profil = () => {
     });
   };
 
-  const handleSimpanPerubahan = async () => {
+  const handleSaveChanges = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/mahasiswa/${mahasiswa.id}/update-skill`, { newSkill });
+      const response = await axios.put(`http://localhost:5000/student/${student.id}/update-skill`, { newSkill });
       console.log(response.data);
       setSkill(newSkill);
       setShowModal(false);
@@ -196,7 +196,7 @@ const Profil = () => {
 
           <div className="box p-5 mt-5">
             <div className="title is-4 has-text-weight-semibold">Informasi Pribadi</div>
-            {mahasiswa ? (
+            {student ? (
               <div className="columns">
                 <div className="column">
                   <div className="my-2">
@@ -204,7 +204,7 @@ const Profil = () => {
                       Nama
                     </div>
                     <div className="is-size-6">
-                      {mahasiswa.nama}
+                      {student.name}
                     </div>
                   </div>
                   <div className="my-2">
@@ -212,7 +212,7 @@ const Profil = () => {
                       NIM
                     </div>
                     <div className="is-size-6">
-                      {mahasiswa.nim}
+                      {student.nim}
                     </div>
                   </div>
                   <div className="my-2">
@@ -220,7 +220,7 @@ const Profil = () => {
                       Email
                     </div>
                     <div className="is-size-6">
-                      {mahasiswa.email}
+                      {student.email}
                     </div>
                   </div>
                 </div>
@@ -230,7 +230,7 @@ const Profil = () => {
                       No. Telepon
                     </div>
                     <div className="is-size-6">
-                      {mahasiswa.noTelp}
+                      {student.phoneNumber}
                     </div>
                   </div>
                   <div className="my-2">
@@ -238,7 +238,7 @@ const Profil = () => {
                       Major
                     </div>
                     <div className="is-size-6">
-                      {mahasiswa.jurusan}
+                      {student.major}
                     </div>
                   </div>
                   <div className="my-2">
@@ -246,7 +246,7 @@ const Profil = () => {
                       Angkatan
                     </div>
                     <div className="is-size-6">
-                      {mahasiswa.angkatan}
+                      {student.cohort}
                     </div>
                   </div>
                 </div>
@@ -355,14 +355,14 @@ const Profil = () => {
                 {newSkill.map((newSkill, index) => (
                   <div key={index} className="tag is-info is-medium is-flex is-align-items-center">
                     {newSkill}
-                    <button className="delete is-small ml-1" onClick={() => handleDeleteKeterampilan(index)}></button>
+                    <button className="delete is-small ml-1" onClick={() => handleDeleteSkill(index)}></button>
                   </div>
                 ))}
               </div>
-              <button className="button is-info mt-3" onClick={handleTambahKeterampilan}>Tambah Keterampilan</button>
+              <button className="button is-info mt-3" onClick={handleAddSkill}>Tambah Keterampilan</button>
             </section>
             <footer className="modal-card-foot is-flex is-justify-content-flex-end">
-              <button className="button is-success" onClick={handleSimpanPerubahan}>Simpan Perubahan</button>
+              <button className="button is-success" onClick={handleSaveChanges}>Simpan Perubahan</button>
             </footer>
           </div>
         </div>

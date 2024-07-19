@@ -12,9 +12,9 @@ import { getAllGeneralQuestion, saveGeneralQuestion, saveManyGeneralQuestion } f
 import { getAllLaborJob, getLaborJob, getLaborJobByLecturer, saveLaborJob, updateLaborJob } from './controllers/LaborJobController.js';
 import { getAllLecturer, saveLecturer } from './controllers/LecturerController.js';
 import { getLecturer, loginLecturer, logoutLecturer } from './controllers/LecturerLoginController.js';
-import { getStudent, loginStudent, logoutStudent } from './controllers/StudentLoginController.js';
 import { getAllMajor, saveMajor } from './controllers/MajorController.js';
 import { deleteCv, getAllStudent, getCv, getSkill, saveStudent, sendCv, updateSkill, uploadCv } from './controllers/StudentController.js';
+import { getStudent, loginStudent, logoutStudent } from './controllers/StudentLoginController.js';
 
 const router = express.Router();
 
@@ -28,8 +28,8 @@ const storage = multer.diskStorage({
 const uploadCvProfile = multer({ storage: storage });
 const uploadCvApplication = multer({ storage: storage });
 const uploadAvatar = multer({ storage: storage });
-const uploadJawabanImage = multer({ storage: storage });
-const uploadPertanyaanImage = multer({ storage: storage });
+const uploadAnswerImage = multer({ storage: storage });
+const uploadQuestionImage = multer({ storage: storage });
 
 router.use(
   cors({
@@ -42,86 +42,86 @@ router.get('/', (req, res) => {
   res.send('Hello, Darling!');
 });
 
-router.route('/mahasiswas')
+router.route('/student')
   .get(getAllStudent)
   .post(saveStudent);
 
-router.route('/jurusan')
+router.route('/major')
   .get(getAllMajor)
   .post(saveMajor);
 
-router.route('/pertanyaan-umum')
+router.route('/general-question')
   .get(getAllGeneralQuestion)
   .post(saveGeneralQuestion);
 
-router.route('/pertanyaan-umum/save-many')
+router.route('/general-question/save-many')
   .post(saveManyGeneralQuestion);
 
-router.route('/fakultas')
+router.route('/faculty')
   .get(getAllFaculty)
   .post(saveFaculty);
 
-router.route('/bidang-keahlian')
+router.route('/expertise')
   .get(getAllExpertiseGroup)
   .post(saveExpertiseGroup);
 
-router.route('/dosens')
+router.route('/lecturer')
   .get(getAllLecturer)
   .post(saveLecturer);
 
-router.route('/lowongan-labor')
+router.route('/labor-job')
   .get(getAllLaborJob)
   .post(saveLaborJob);
   
-router.route('/lowongan-labor/:id')
+router.route('/labor-job/:id')
   .get(getLaborJob)
   .put(updateLaborJob);
 
-router.route('/lamaran')
+router.route('/application')
   .get(getAllApplication)
   .post(saveApplication);
 
-router.route('/lamaran/:id')
+router.route('/application/:id')
   .get(getApplication);
 
-router.route('/lamaran/:mahasiswaId/:lowonganLaborId')
+router.route('/application/:studentId/:laborJobId')
   .get(getApplicationByStudentAndLaborJob)
   .post(startLamar);
 
-router.route('/lowongan-labor/dosen/:id')
+router.route('/labor-job/lecturer/:id')
   .get(getLaborJobByLecturer);
   
-router.route('/departemen/:id')
+router.route('/department/:id')
   .get(getDepartment);
 
-router.route('/departemen/dosen/:id')
+router.route('/department/dosen/:id')
   .get(getDepartmentByLecturer);
 
-router.route('/departemen')
+router.route('/department')
   .post(saveDepartment);
 
-router.route('/mhs/login')
+router.route('/student/login')
   .post(loginStudent);
 
-router.route('/mhs')
+router.route('/student')
   .get(getStudent);
 
-router.route('/mhs/logout')
+router.route('/student/logout')
   .get(logoutStudent);
 
-router.route('/dosen/login')
+router.route('/lecturer/login')
   .post(loginLecturer);
 
-router.route('/dosen')
+router.route('/lecturer')
   .get(getLecturer);
 
-router.route('/dosen/logout')
+router.route('/lecturer/logout')
   .get(logoutLecturer);
 
-router.route('/mahasiswa/:id/get-skill')
+router.route('/student/:id/get-skill')
   .get(getSkill);
 
-router.route('/mahasiswa/:id/update-skill')
+router.route('/student/:id/update-skill')
   .put(updateSkill);
 
 router.route('/cv/:id/get')

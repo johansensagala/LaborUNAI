@@ -1,12 +1,12 @@
 import Navbar from "../../layouts/Navbar";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Pertanyaan from "./Pertanyaan";
-import PertanyaanUmum from "./PertanyaanUmum";
+import Question from "./Question";
+import GeneralQuestion from "./GeneralQuestion";
 
-const ProsesLamarMahasiswa = () => {
-    const [lowonganPekerjaan, setLowonganPekerjaan] = useState({});
-    const [lamaran, setLamaran] = useState({});
+const ApplicationProcess = () => {
+    const [laborJob, setLaborJob] = useState({});
+    const [application, setApplication] = useState({});
     const [activeLayout, setActiveLayout] = useState('CATATAN_SINGKAT');
     const navigate = useNavigate();
     const location = useLocation();
@@ -15,34 +15,34 @@ const ProsesLamarMahasiswa = () => {
 
     useEffect(() => {
         if (location.state) {
-            setLowonganPekerjaan(location.state.lowonganPekerjaan);
-            setLamaran(location.state.lamaran);
+            setLaborJob(location.state.laborJob);
+            setApplication(location.state.application);
             moveToLayout(0);
         }
     }, [location.state]);
 
-    const submitPertanyaan = () => {
+    const submitQuestion = () => {
         console.log("Submit pertanyaan");
     }
 
     const moveToLayout = (layout) => {
         switch (layout) {
             case 0:
-                if (lamaran.catatanSingkat != null) {
+                if (application.note != null) {
                     moveToLayout(1);
                 } else {
                     moveForcedToLayout(0);
                 }
                 break;
             case 1:
-                if (lamaran.cv != null || lowonganPekerjaan.perluUploadCv) {
+                if (application.cv != null || laborJob.needCvUpload) {
                     moveToLayout(2);
                 } else {
                     moveForcedToLayout(1);
                 }
                 break;
             case 2:
-                if (lamaran.jawabanPertanyaanUmum != null || lowonganPekerjaan.perluPertanyaanUmum) {
+                if (application.generalQuestionAnswer != null || laborJob.needGeneralQuestion) {
                     moveToLayout(3);
                 } else {
                     moveForcedToLayout(2);
@@ -98,19 +98,19 @@ const ProsesLamarMahasiswa = () => {
                         </div>
 
                         <div className="box my-5 p-5">
-                            {lowonganPekerjaan.pertanyaan && lowonganPekerjaan.pertanyaan.length === 0 && <p className="mb-4">Belum ada pertanyaan</p>}
-                            {lowonganPekerjaan.pertanyaan && lowonganPekerjaan.pertanyaan.map((item, index) => (
-                                <PertanyaanUmum
+                            {laborJob.questions && laborJob.questions.length === 0 && <p className="mb-4">Belum ada pertanyaan</p>}
+                            {laborJob.questions && laborJob.questions.map((item, index) => (
+                                <GeneralQuestion
                                     key={index}
                                     item={item}
                                     index={index}
                                 />
                             ))}
 
-                            {lowonganPekerjaan.pertanyaan && lowonganPekerjaan.pertanyaan.length !== 0 &&
+                            {laborJob.questions && laborJob.questions.length !== 0 &&
                                 <div className="field is-grouped">
                                     <div className="control">
-                                        <button className="button is-primary is-pulled-right" type="submit" onClick={submitPertanyaan}>Submit Pertanyaan</button>
+                                        <button className="button is-primary is-pulled-right" type="submit" onClick={submitQuestion}>Submit Pertanyaan</button>
                                     </div>
                                 </div>
                             }
@@ -129,19 +129,19 @@ const ProsesLamarMahasiswa = () => {
                         </div>
 
                         <div className="box my-5 p-5">
-                            {lowonganPekerjaan.pertanyaan && lowonganPekerjaan.pertanyaan.length === 0 && <p className="mb-4">Belum ada pertanyaan</p>}
-                            {lowonganPekerjaan.pertanyaan && lowonganPekerjaan.pertanyaan.map((item, index) => (
-                                <Pertanyaan
+                            {laborJob.pertanyaan && laborJob.pertanyaan.length === 0 && <p className="mb-4">Belum ada pertanyaan</p>}
+                            {laborJob.pertanyaan && laborJob.pertanyaan.map((item, index) => (
+                                <Question
                                     key={index}
                                     item={item}
                                     index={index}
                                 />
                             ))}
 
-                            {lowonganPekerjaan.pertanyaan && lowonganPekerjaan.pertanyaan.length !== 0 &&
+                            {laborJob.pertanyaan && laborJob.pertanyaan.length !== 0 &&
                                 <div className="field is-grouped">
                                     <div className="control">
-                                        <button className="button is-primary is-pulled-right" type="submit" onClick={submitPertanyaan}>Submit Pertanyaan</button>
+                                        <button className="button is-primary is-pulled-right" type="submit" onClick={submitQuestion}>Submit Pertanyaan</button>
                                     </div>
                                 </div>
                             }
@@ -153,4 +153,4 @@ const ProsesLamarMahasiswa = () => {
     );
 };
 
-export default ProsesLamarMahasiswa;
+export default ApplicationProcess;

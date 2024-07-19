@@ -5,37 +5,37 @@ import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import Navbar from "../../layouts/Navbar";
 
-const DetailLowonganPekerjaanDosen = () => {
-    const [lowonganPekerjaan, setLowonganPekerjaan] = useState({});
+const LaborJobDetail = () => {
+    const [laborJob, setLaborJob] = useState({});
     const { id } = useParams();
-    const [departemenNames, setDepartemenNames] = useState('');
-    const [keterampilan, setKeterampilan] = useState([]);
+    const [departmentName, setDepartmentName] = useState('');
+    const [skill, setSkill] = useState([]);
 
     useEffect(() => {
-        getLowonganPekerjaan();
+        getLaborJob();
     }, []);
     
-    const getLowonganPekerjaan = async () => {
+    const getLaborJob = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/lowongan-labor/${id}`);
-            setLowonganPekerjaan(response.data);
+            const response = await axios.get(`http://localhost:5000/labor-job/${id}`);
+            setLaborJob(response.data);
     
-            getDepartemenNama(response.data.departemenId);
+            getDepartmentName(response.data.department);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
 
-    const getDepartemenNama = async (departemenId) => {
+    const getDepartmentName = async (departemenId) => {
         try {
             const response = await axios.get(`http://localhost:5000/departemen/${departemenId}`);
-            setDepartemenNames(response.data.nama_departemen);
+            setDepartmentName(response.data.departmentName);
         } catch (error) {
             console.error("Error fetching departemen data:", error);
         }
     };
 
-    const handleLamarClick = () => {
+    const handleApplyClick = () => {
         Swal.fire({
             title: 'Masukkan keterampilan Anda:',
             input: 'text',
@@ -63,29 +63,29 @@ const DetailLowonganPekerjaanDosen = () => {
                 <div className="columns is-centered">
                     <div className="column is-half">
                         <div className="box p-5 m-6" style={{ background: '#f5f5f5', color: '#333' }}>
-                            <div className="title is-4 has-text-weight-semibold has-text-centered">{lowonganPekerjaan.posisi}</div>
+                            <div className="title is-4 has-text-weight-semibold has-text-centered">{laborJob.position}</div>
                             <div className="subtitle is-5 has-text-weight-bold has-text-centered" style={{ color: 'green' }}>
-                                {departemenNames}
+                                {departmentName}
                             </div>
-                            <div className="has-text-weight-medium">Gaji: {lowonganPekerjaan.gaji} Rp per bulan</div>
+                            <div className="has-text-weight-medium">Gaji: {laborJob.salary} Rp per bulan</div>
     
                             <div className="has-text-weight-medium mt-5">Tanggung Jawab</div>
                             <ul>
-                                {lowonganPekerjaan.tanggungJawab && lowonganPekerjaan.tanggungJawab.map((tugas, index) => (
-                                    <li key={index}><FaCheck />{tugas}</li>
+                                {laborJob.responsibilities && laborJob.responsibilities.map((responsibility, index) => (
+                                    <li key={index}><FaCheck />{responsibility}</li>
                                 ))}
                             </ul>
     
                             <div className="has-text-weight-medium mt-5">Persyaratan</div>
                             <ul>
-                                {lowonganPekerjaan.persyaratan && lowonganPekerjaan.persyaratan.map((tugas, index) => (
-                                    <li key={index}><FaCheck />{tugas}</li>
+                                {laborJob.requirements && laborJob.requirements.map((requirement, index) => (
+                                    <li key={index}><FaCheck />{requirement}</li>
                                 ))}
                             </ul>
     
                             <div className="buttons is-centered mt-5">
-                                <button className="button is-primary mr-3" onClick={handleLamarClick}>Edit</button>
-                                <button className="button is-info" onClick={handleLamarClick}>Lihat Pelamar</button>
+                                <button className="button is-primary mr-3" onClick={handleApplyClick}>Edit</button>
+                                <button className="button is-info" onClick={handleApplyClick}>Lihat Pelamar</button>
                             </div>
                         </div>
                     </div>
@@ -95,4 +95,4 @@ const DetailLowonganPekerjaanDosen = () => {
     );
 };
 
-export default DetailLowonganPekerjaanDosen;
+export default LaborJobDetail;

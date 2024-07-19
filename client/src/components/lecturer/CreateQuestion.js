@@ -1,123 +1,123 @@
-import React, { useState, useEffect } from "react";
-import Navbar from "../../layouts/Navbar";
-import Swal from 'sweetalert';
+import React, { useEffect, useState } from "react";
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert';
+import Navbar from "../../layouts/Navbar";
 
-const BuatPertanyaan = () => {
-    const [posisi, setPosisi] = useState("");
-    const [departemen, setDepartemen] = useState("");
-    const [departemenList, setDepartemenList] = useState([]);
-    const [gaji, setGaji] = useState("");
-    const [deskripsi, setDeskripsi] = useState("");
-    const [tanggungJawab, setTanggungJawab] = useState([""]);
-    const [persyaratan, setPersyaratan] = useState([""]);
-    const [tenggat, setTenggat] = useState("");
+const CreateQuestion = () => {
+    const [position, setPosition] = useState("");
+    const [department, setDepartment] = useState("");
+    const [departmentList, setDepartmentList] = useState([]);
+    const [salary, setSalary] = useState("");
+    const [description, setDescription] = useState("");
+    const [responsibilities, setResponsibilities] = useState([""]);
+    const [requirements, setRequirements] = useState([""]);
+    const [deadline, setDeadline] = useState("");
 
-    const [pertanyaan, setPertanyaan] = useState([]);
+    const [questions, setQuestions] = useState([]);
     const [showModalAdd, setShowModalAdd] = useState(false);
     const [showModalEdit, setShowModalEdit] = useState(false);
-    const [currentEdit, setcurrentEdit] = useState(0);
-    const [inputPertanyaan, setInputPertanyaan] = useState("");
-    const [jenisPertanyaan, setJenisPertanyaan] = useState("");
-    const [jumlahPertanyaanRadio, setJumlahPertanyaanRadio] = useState(2);
-    const [jumlahPertanyaanCheckbox, setJumlahPertanyaanCheckbox] = useState(2);
-    const [optionPertanyaanRadio, setOptionPertanyaanRadio] = useState(Array.from({ length: 2 }, () => ''));
-    const [optionPertanyaanCheckbox, setOptionPertanyaanCheckbox] = useState(Array.from({ length: 2 }, () => ''));
+    const [currentEdit, setCurrentEdit] = useState(0);
+    const [question, setQuestion] = useState("");
+    const [questionType, setQuestionType] = useState("");
+    const [numberOfQuestionRadio, setNumberOfQuestionRadio] = useState(2);
+    const [numberOfQuestionCheckbox, setNumberOfQuestionCheckbox] = useState(2);
+    const [optionsOfQuestionRadio, setOptionOfQuestionRadio] = useState(Array.from({ length: 2 }, () => ''));
+    const [optionsOfQuestionCheckbox, setOptionOfQuestionCheckbox] = useState(Array.from({ length: 2 }, () => ''));
 
     const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
         if (location.state) {
-            setPosisi(location.state.posisi);
-            setDepartemen(location.state.departemen);
-            setDepartemenList(location.state.departemenList);
-            setGaji(location.state.gaji);
-            setDeskripsi(location.state.deskripsi);
-            setTanggungJawab(location.state.tanggungJawab);
-            setPersyaratan(location.state.persyaratan);
-            setTenggat(location.state.tenggat);
-            setPertanyaan(location.state.pertanyaan);
+            setPosition(location.state.position);
+            setDepartment(location.state.department);
+            setDepartmentList(location.state.departmentList);
+            setSalary(location.state.salary);
+            setDescription(location.state.description);
+            setResponsibilities(location.state.responsibilities);
+            setRequirements(location.state.requirements);
+            setDeadline(location.state.deadline);
+            setQuestions(location.state.questions);
         }
     }, [location.state]);
 
-    const submitPertanyaan = () => {
-        navigate('/dosen/lowongan/create', { 
+    const submitQuestion = () => {
+        navigate('/lecturer/labor-job/create', { 
             state: { 
-                posisi: posisi,
-                departemen: departemen,
-                departemenList: departemenList,
-                gaji: gaji,
-                deskripsi: deskripsi,
-                tanggungJawab: tanggungJawab,
-                persyaratan: persyaratan,
-                tenggat: tenggat,
-                pertanyaan: pertanyaan,
+                position: position,
+                department: department,
+                departmentList: departmentList,
+                salary: salary,
+                description: description,
+                responsibilities: responsibilities,
+                requirements: requirements,
+                deadline: deadline,
+                questions: questions,
             } 
         });
     };
     
-    const handleJumlahPertanyaanRadio = (e) => {
+    const handleNumberOfQuestionRadio = (e) => {
         const number = parseInt(e.target.value, 10);
         
-        if (number >= jumlahPertanyaanRadio) {
-            const currentOptions = [...optionPertanyaanRadio];
+        if (number >= numberOfQuestionRadio) {
+            const currentOptions = [...optionsOfQuestionRadio];
             const additionalOptions = Array.from({ length: number - currentOptions.length }, () => '');
             const updatedOptions = [...currentOptions, ...additionalOptions];
-            setJumlahPertanyaanRadio(number);
-            setOptionPertanyaanRadio(updatedOptions);
+            setNumberOfQuestionRadio(number);
+            setOptionOfQuestionRadio(updatedOptions);
         } else {
-            const currentOptions = optionPertanyaanRadio.slice(0, number);
-            setJumlahPertanyaanRadio(number);
-            setOptionPertanyaanRadio(currentOptions);
+            const currentOptions = optionsOfQuestionRadio.slice(0, number);
+            setNumberOfQuestionRadio(number);
+            setOptionOfQuestionRadio(currentOptions);
         }
     };
 
-    const handleJumlahPertanyaanCheckbox = (e) => {
+    const handleNumberOfQuestionCheckbox = (e) => {
         const number = parseInt(e.target.value, 10);
         
-        if (number >= jumlahPertanyaanCheckbox) {
-            const currentOptions = [...optionPertanyaanCheckbox];
+        if (number >= numberOfQuestionCheckbox) {
+            const currentOptions = [...optionsOfQuestionCheckbox];
             const additionalOptions = Array.from({ length: number - currentOptions.length }, () => '');
             const updatedOptions = [...currentOptions, ...additionalOptions];
-            setJumlahPertanyaanCheckbox(number);
-            setOptionPertanyaanCheckbox(updatedOptions);
+            setNumberOfQuestionCheckbox(number);
+            setOptionOfQuestionCheckbox(updatedOptions);
         } else {
-            const currentOptions = optionPertanyaanCheckbox.slice(0, number);
-            setJumlahPertanyaanCheckbox(number);
-            setOptionPertanyaanCheckbox(currentOptions);
+            const currentOptions = optionsOfQuestionCheckbox.slice(0, number);
+            setNumberOfQuestionCheckbox(number);
+            setOptionOfQuestionCheckbox(currentOptions);
         }
     };
 
-    const handleOptionPertanyaanRadio = (index, e) => {
-        const newOptions = [...optionPertanyaanRadio];
+    const handleOptionOfQuestionRadio = (index, e) => {
+        const newOptions = [...optionsOfQuestionRadio];
         newOptions[index] = e.target.value;
-        setOptionPertanyaanRadio(newOptions);
+        setOptionOfQuestionRadio(newOptions);
     };
 
-    const handleOptionPertanyaanCheckbox = (index, e) => {
-        const newOptions = [...optionPertanyaanCheckbox];
+    const handleOptionOfQuestionCheckbox = (index, e) => {
+        const newOptions = [...optionsOfQuestionCheckbox];
         newOptions[index] = e.target.value;
-        setOptionPertanyaanCheckbox(newOptions);
+        setOptionOfQuestionCheckbox(newOptions);
     };
 
     const handleEdit = (index) => {
-        const editedPertanyaan = pertanyaan[index];
-        setcurrentEdit(index);
+        const editedQuestion = questions[index];
+        setCurrentEdit(index);
     
         setShowModalEdit(true);
-        setInputPertanyaan(editedPertanyaan.inputPertanyaan);
-        setJenisPertanyaan(editedPertanyaan.jenisPertanyaan);
+        setQuestion(editedQuestion.question);
+        setQuestionType(editedQuestion.questionType);
     
-        if (editedPertanyaan.jenisPertanyaan === "radio") {
-            setJumlahPertanyaanRadio(editedPertanyaan.optionPertanyaanRadio.length);
-            setOptionPertanyaanRadio([...editedPertanyaan.optionPertanyaanRadio]);
+        if (editedQuestion.questionType === "radio") {
+            setNumberOfQuestionRadio(editedQuestion.optionsOfQuestionRadio.length);
+            setOptionOfQuestionRadio([...editedQuestion.optionsOfQuestionRadio]);
         }
     
-        if (editedPertanyaan.jenisPertanyaan === "checkbox") {
-            setJumlahPertanyaanCheckbox(editedPertanyaan.optionPertanyaanCheckbox.length);
-            setOptionPertanyaanCheckbox([...editedPertanyaan.optionPertanyaanCheckbox]);
+        if (editedQuestion.questionType === "checkbox") {
+            setNumberOfQuestionCheckbox(editedQuestion.optionsOfQuestionCheckbox.length);
+            setOptionOfQuestionCheckbox([...editedQuestion.optionsOfQuestionCheckbox]);
         }
     
     };
@@ -125,14 +125,14 @@ const BuatPertanyaan = () => {
     const handleDelete = (index) => {
         Swal({
             title: "Hapus Pertanyaan?",
-            text: "Yakin ingin menghapus pertanyaan?",
+            text: "Yakin ingin menghapus questions?",
             icon: "warning",
             buttons: true,
             dangerMode: true,
         })
         .then((willDelete) => {
             if (willDelete) {
-                setPertanyaan(prevState => {
+                setQuestions(prevState => {
                     return prevState.filter((_, i) => i !== index);
                 });
                 Swal(
@@ -144,8 +144,8 @@ const BuatPertanyaan = () => {
         });
     };
                     
-    const tambahPertanyaan = () => {
-        if (inputPertanyaan.trim() === "") {
+    const tambahQuestion = () => {
+        if (question.trim() === "") {
             Swal({
                 title: 'Error!',
                 text: 'Pertanyaan tidak boleh kosong',
@@ -155,24 +155,24 @@ const BuatPertanyaan = () => {
             return;
         }
 
-        if (jenisPertanyaan === "radio") {
-            if (optionPertanyaanRadio.some(option => option.trim() === "")) {
+        if (questionType === "radio") {
+            if (optionsOfQuestionRadio.some(option => option.trim() === "")) {
                 Swal({
                     title: 'Error!',
-                    text: 'Pilihan pada pertanyaan radio tidak boleh kosong',
+                    text: 'Pilihan pada questions radio tidak boleh kosong',
                     icon: 'error',
                     button: 'OK'
                 });
                 return;
             }
 
-            setPertanyaan([...pertanyaan, {
-                jenisPertanyaan,
-                inputPertanyaan,
-                optionPertanyaanRadio
+            setQuestions([...questions, {
+                questionType,
+                question,
+                optionsOfQuestionRadio
             }]);
-        } else if (jenisPertanyaan === "checkbox") {
-            if (optionPertanyaanCheckbox.some(option => option.trim() === "")) {
+        } else if (questionType === "checkbox") {
+            if (optionsOfQuestionCheckbox.some(option => option.trim() === "")) {
                 Swal({
                     title: 'Error!',
                     text: 'Pilihan pada pertanyaan checkbox tidak boleh kosong',
@@ -182,24 +182,24 @@ const BuatPertanyaan = () => {
                 return;
             }
 
-            setPertanyaan([...pertanyaan, {
-                jenisPertanyaan,
-                inputPertanyaan,
-                optionPertanyaanCheckbox
+            setQuestions([...questions, {
+                questionType,
+                question,
+                optionsOfQuestionCheckbox
             }]);
         } else {
-            setPertanyaan([...pertanyaan, {
-                jenisPertanyaan,
-                inputPertanyaan
+            setQuestions([...questions, {
+                questionType,
+                question
             }]);
         }
 
-        resetPertanyaan();
+        resetQuestions();
         setShowModalAdd(false);
     }
 
-    const editPertanyaan = () => {
-        if (inputPertanyaan.trim() === "") {
+    const editQuestion = () => {
+        if (question.trim() === "") {
             Swal({
                 title: 'Error!',
                 text: 'Pertanyaan tidak boleh kosong',
@@ -209,11 +209,11 @@ const BuatPertanyaan = () => {
             return;
         }
     
-        if (jenisPertanyaan === "radio") {
-            if (optionPertanyaanRadio.some(option => option.trim() === "")) {
+        if (questionType === "radio") {
+            if (optionsOfQuestionRadio.some(option => option.trim() === "")) {
                 Swal({
                     title: 'Error!',
-                    text: 'Pilihan pada pertanyaan radio tidak boleh kosong',
+                    text: 'Pilihan pada questions radio tidak boleh kosong',
                     icon: 'error',
                     button: 'OK'
                 });
@@ -222,20 +222,20 @@ const BuatPertanyaan = () => {
     
             const editedIndex = currentEdit;
     
-            const updatedPertanyaan = [...pertanyaan];
+            const updatedQuestion = [...questions];
     
-            updatedPertanyaan[editedIndex] = {
-                jenisPertanyaan,
-                inputPertanyaan,
-                optionPertanyaanRadio
+            updatedQuestion[editedIndex] = {
+                questionType,
+                question,
+                optionsOfQuestionRadio
             };
     
-            setPertanyaan(updatedPertanyaan);
-        } else if (jenisPertanyaan === "checkbox") {
-            if (optionPertanyaanCheckbox.some(option => option.trim() === "")) {
+            setQuestions(updatedQuestion);
+        } else if (questionType === "checkbox") {
+            if (optionsOfQuestionCheckbox.some(option => option.trim() === "")) {
                 Swal({
                     title: 'Error!',
-                    text: 'Pilihan pada pertanyaan checkbox tidak boleh kosong',
+                    text: 'Pilihan pada questions checkbox tidak boleh kosong',
                     icon: 'error',
                     button: 'OK'
                 });
@@ -244,40 +244,40 @@ const BuatPertanyaan = () => {
     
             const editedIndex = currentEdit;
     
-            const updatedPertanyaan = [...pertanyaan];
+            const updatedQuestion = [...questions];
     
-            updatedPertanyaan[editedIndex] = {
-                jenisPertanyaan,
-                inputPertanyaan,
-                optionPertanyaanCheckbox
+            updatedQuestion[editedIndex] = {
+                questionType,
+                question,
+                optionsOfQuestionCheckbox
             };
     
-            setPertanyaan(updatedPertanyaan);
+            setQuestions(updatedQuestion);
         } else {
             const editedIndex = currentEdit;
     
-            const updatedPertanyaan = [...pertanyaan];
+            const updatedQuestion = [...questions];
     
-            updatedPertanyaan[editedIndex] = {
-                jenisPertanyaan,
-                inputPertanyaan
+            updatedQuestion[editedIndex] = {
+                questionType,
+                question
             };
     
-            setPertanyaan(updatedPertanyaan);
+            setQuestions(updatedQuestion);
         }
     
-        resetPertanyaan();
+        resetQuestions();
         setShowModalEdit(false);
     };
     
-    const cancelTambahPertanyaan = () => {
+    const cancelAddQuestion = () => {
         if (
-            inputPertanyaan !== "" ||
-            jenisPertanyaan !== "" ||
-            jumlahPertanyaanRadio !== 2 ||
-            jumlahPertanyaanCheckbox !== 2 ||
-            optionPertanyaanRadio.some(option => option !== '') ||
-            optionPertanyaanCheckbox.some(option => option !== '')
+            question !== "" ||
+            questionType !== "" ||
+            numberOfQuestionRadio !== 2 ||
+            numberOfQuestionCheckbox !== 2 ||
+            optionsOfQuestionRadio.some(option => option !== '') ||
+            optionsOfQuestionCheckbox.some(option => option !== '')
         ) {
             Swal({
                 title: "Batalkan Perubahan?",
@@ -287,7 +287,7 @@ const BuatPertanyaan = () => {
                 dangerMode: true,
             }).then((ok) => {
                 if (ok) {
-                    resetPertanyaan();
+                    resetQuestions();
                     setShowModalAdd(false);
                 }
             });
@@ -296,14 +296,14 @@ const BuatPertanyaan = () => {
         }
     };
         
-    const cancelEditPertanyaan = () => {
+    const cancelEditQuestion = () => {
         if (
-            inputPertanyaan !== pertanyaan[currentEdit].inputPertanyaan ||
-            jenisPertanyaan !== pertanyaan[currentEdit].jenisPertanyaan ||
-            (jenisPertanyaan === "radio" && jumlahPertanyaanRadio !== pertanyaan[currentEdit].optionPertanyaanRadio.length) ||
-            (jenisPertanyaan === "checkbox" && jumlahPertanyaanCheckbox !== pertanyaan[currentEdit].optionPertanyaanCheckbox.length) ||
-            (jenisPertanyaan === "radio" && !optionPertanyaanRadio.every((option, index) => option === pertanyaan[currentEdit].optionPertanyaanRadio[index])) ||
-            (jenisPertanyaan === "checkbox" && !optionPertanyaanCheckbox.every((option, index) => option === pertanyaan[currentEdit].optionPertanyaanCheckbox[index]))
+            question !== questions[currentEdit].question ||
+            questionType !== questions[currentEdit].questionType ||
+            (questionType === "radio" && numberOfQuestionRadio !== questions[currentEdit].optionsOfQuestionRadio.length) ||
+            (questionType === "checkbox" && numberOfQuestionCheckbox !== questions[currentEdit].optionsOfQuestionCheckbox.length) ||
+            (questionType === "radio" && !optionsOfQuestionRadio.every((option, index) => option === questions[currentEdit].optionsOfQuestionRadio[index])) ||
+            (questionType === "checkbox" && !optionsOfQuestionCheckbox.every((option, index) => option === questions[currentEdit].optionsOfQuestionCheckbox[index]))
         ) {
             Swal({
                 title: "Batalkan Perubahan?",
@@ -313,7 +313,7 @@ const BuatPertanyaan = () => {
                 dangerMode: true,
             }).then((ok) => {
                 if (ok) {
-                    resetPertanyaan();
+                    resetQuestions();
                     setShowModalEdit(false);
                 }
             });
@@ -322,13 +322,13 @@ const BuatPertanyaan = () => {
         }
     };
     
-    const resetPertanyaan = () => {
-        setInputPertanyaan("");
-        setJenisPertanyaan("");
-        setJumlahPertanyaanRadio(2);
-        setJumlahPertanyaanCheckbox(2);
-        setOptionPertanyaanRadio(Array.from({ length: 2 }, () => ''));
-        setOptionPertanyaanCheckbox(Array.from({ length: 2 }, () => ''));
+    const resetQuestions = () => {
+        setQuestion("");
+        setQuestionType("");
+        setNumberOfQuestionRadio(2);
+        setNumberOfQuestionCheckbox(2);
+        setOptionOfQuestionRadio(Array.from({ length: 2 }, () => ''));
+        setOptionOfQuestionCheckbox(Array.from({ length: 2 }, () => ''));
     }
 
     return (
@@ -344,14 +344,14 @@ const BuatPertanyaan = () => {
                         <button className="button is-primary" onClick={() => setShowModalAdd(true)}>Tambah Pertanyaan</button>
                         
                         <div className="box my-5 p-5">
-                            {pertanyaan.length === 0 && <p className="mb-4">Belum ada pertanyaan</p>}
-                            {pertanyaan.map((item, index) => {
-                                if (item.jenisPertanyaan === "text") {
+                            {questions.length === 0 && <p className="mb-4">Belum ada questions</p>}
+                            {questions.map((item, index) => {
+                                if (item.questionType === "text") {
                                     return (
                                         <div className="columns is-flex">
                                             <div className="column is-three-quarters" key={index}>
                                                 <div className="field">
-                                                    <label className="label">{index + 1}. {item.inputPertanyaan}</label>
+                                                    <label className="label">{index + 1}. {item.question}</label>
                                                     <div className="control">
                                                         <input className="input" type="text" placeholder="Masukkan jawaban Anda" readOnly/>
                                                     </div>
@@ -371,11 +371,11 @@ const BuatPertanyaan = () => {
                                             </div>
                                         </div>
                                     );
-                            } else if (item.jenisPertanyaan === "textarea") {
+                            } else if (item.questionType === "textarea") {
                                 return (
                                     <div className="columns is-flex">
                                         <div className="column is-three-quarters" key={index}>
-                                            <label className="label">{index + 1}. {item.inputPertanyaan}</label>
+                                            <label className="label">{index + 1}. {item.question}</label>
                                             <div className="control">
                                                 <textarea className="textarea" placeholder="Masukkan jawaban Anda" readOnly></textarea>
                                             </div>
@@ -394,13 +394,13 @@ const BuatPertanyaan = () => {
                                         </div>
                                     </div>
                                 );
-                            } else if (item.jenisPertanyaan === "radio") {
+                            } else if (item.questionType === "radio") {
                                 return (
                                     <div className="columns is-flex">
                                         <div className="column is-three-quarters" key={index}>
-                                            <label className="label">{index + 1}. {item.inputPertanyaan}</label>
+                                            <label className="label">{index + 1}. {item.question}</label>
                                             <div className="control">
-                                                {item.optionPertanyaanRadio.map((option, optionIndex) => (
+                                                {item.optionsOfQuestionRadio.map((option, optionIndex) => (
                                                     <React.Fragment key={optionIndex}>
                                                         <label className="radio is-inline">
                                                             <input 
@@ -428,13 +428,13 @@ const BuatPertanyaan = () => {
                                         </div>
                                     </div>
                                 );
-                            } else if (item.jenisPertanyaan === "checkbox") {
+                            } else if (item.questionType === "checkbox") {
                                 return (
                                     <div className="columns is-flex">
                                         <div className="column is-three-quarters" key={index}>
-                                            <label className="label">{index + 1}. {item.inputPertanyaan}</label>
+                                            <label className="label">{index + 1}. {item.question}</label>
                                             <div className="control">
-                                                {item.optionPertanyaanCheckbox.map((option, optionIndex) => (
+                                                {item.optionsOfQuestionCheckbox.map((option, optionIndex) => (
                                                     <React.Fragment key={optionIndex}>
                                                         <label className="radio is-inline">
                                                             <input 
@@ -465,10 +465,10 @@ const BuatPertanyaan = () => {
                             }
                         })}
 
-                        {pertanyaan.length !== 0 &&
+                        {questions.length !== 0 &&
                         <div className="field is-grouped">
                             <div className="control">
-                                <button className="button is-primary is-pulled-right" type="submit" onClick={() => submitPertanyaan()}>Submit Pertanyaan</button>
+                                <button className="button is-primary is-pulled-right" type="submit" onClick={() => submitQuestion()}>Submit Pertanyaan</button>
                             </div>
                         </div>
                         }
@@ -479,7 +479,7 @@ const BuatPertanyaan = () => {
 
             {showModalAdd && (
                 <div className="modal is-active">
-                    <div className="modal-background" onClick={() => cancelTambahPertanyaan()}></div>
+                    <div className="modal-background" onClick={() => cancelAddQuestion()}></div>
                     <div className="modal-card">
                         <header className="modal-card-head">
                             <p className="modal-card-title has-text-centered">Tambah Pertanyaan Baru</p>
@@ -490,10 +490,10 @@ const BuatPertanyaan = () => {
                                 <div className="control">
                                     <div className="select">
                                         <select
-                                            value={jenisPertanyaan}
-                                            onChange={(e) => setJenisPertanyaan(e.target.value)}
+                                            value={questionType}
+                                            onChange={(e) => setQuestionType(e.target.value)}
                                         >
-                                            <option value="">Pilih jenis pertanyaan</option>
+                                            <option value="">Pilih jenis questions</option>
                                             <option value="text">Pertanyaan Singkat</option>
                                             <option value="textarea">Pertanyaan Panjang</option>
                                             <option value="radio">Pertanyaan Pilihan Ganda (Satu Jawaban)</option>
@@ -502,44 +502,44 @@ const BuatPertanyaan = () => {
                                     </div>
                                 </div>
                             </div>
-                            {jenisPertanyaan === "text" && (
+                            {questionType === "text" && (
                                 <div className="field" id="text">
                                     <label className="label">Pertanyaan dengan Jawaban Singkat</label>
                                     <div className="control">
                                         <input
                                             className="input"
                                             type="text"
-                                            placeholder="Masukkan pertanyaan"
-                                            value={inputPertanyaan}
-                                            onChange={(e) => setInputPertanyaan(e.target.value)}
+                                            placeholder="Masukkan questions"
+                                            value={question}
+                                            onChange={(e) => setQuestion(e.target.value)}
                                         />
                                     </div>
                                 </div>
                             )}
-                            {jenisPertanyaan === "textarea" && (
+                            {questionType === "textarea" && (
                                 <div className="field" id="textarea">
                                     <label className="label">Pertanyaan dengan Jawaban Panjang</label>
                                     <div className="control">
                                         <input
                                             className="input"
                                             type="text"
-                                            placeholder="Masukkan pertanyaan"
-                                            value={inputPertanyaan}
-                                            onChange={(e) => setInputPertanyaan(e.target.value)}
+                                            placeholder="Masukkan questions"
+                                            value={question}
+                                            onChange={(e) => setQuestion(e.target.value)}
                                         />
                                     </div>
                                 </div>
                             )}
-                            {jenisPertanyaan === "radio" && (
+                            {questionType === "radio" && (
                                 <div className="field" id="textarea">
                                 <label className="label">Pertanyaan dengan Satu Pilihan Jawaban</label>
                                 <div className="control">
                                     <input
                                         className="input"
                                         type="text"
-                                        placeholder="Masukkan pertanyaan"
-                                        value={inputPertanyaan}
-                                        onChange={(e) => setInputPertanyaan(e.target.value)}
+                                        placeholder="Masukkan questions"
+                                        value={question}
+                                        onChange={(e) => setQuestion(e.target.value)}
                                     />
                                 </div>
                                 <div className="field">
@@ -547,22 +547,22 @@ const BuatPertanyaan = () => {
                                     <div className="control">
                                         <div className="select mb-4">
                                             <select
-                                                value={jumlahPertanyaanRadio}
-                                                onChange={(e) => handleJumlahPertanyaanRadio(e)}
+                                                value={numberOfQuestionRadio}
+                                                onChange={(e) => handleNumberOfQuestionRadio(e)}
                                             >
                                                 {[...Array(9).keys()].map(num => (
                                                     <option key={num + 2} value={num + 2}>{num + 2}</option>
                                                 ))}
                                             </select>
                                         </div>
-                                        {optionPertanyaanRadio.map((input, index) => (
+                                        {optionsOfQuestionRadio.map((input, index) => (
                                             <div key={index} className="control">
                                                 <input
                                                     className="input"
                                                     type="text"
                                                     placeholder={`Pilihan ${index + 1}`}
                                                     value={input}
-                                                    onChange={(e) => handleOptionPertanyaanRadio(index, e)}
+                                                    onChange={(e) => handleOptionOfQuestionRadio(index, e)}
                                                 />
                                             </div>
                                         ))}
@@ -570,7 +570,7 @@ const BuatPertanyaan = () => {
                                 </div>
                             </div>
                             )}
-                            {jenisPertanyaan === "checkbox" && (
+                            {questionType === "checkbox" && (
                                 <div className="field" id="textarea">
                                 <label className="label">Pertanyaan dengan Beberapa Pilihan Jawaban</label>
                                 <div className="control">
@@ -578,8 +578,8 @@ const BuatPertanyaan = () => {
                                         className="input"
                                         type="text"
                                         placeholder="Masukkan pertanyaan"
-                                        value={inputPertanyaan}
-                                        onChange={(e) => setInputPertanyaan(e.target.value)}
+                                        value={question}
+                                        onChange={(e) => setQuestion(e.target.value)}
                                     />
                                 </div>
                                 <div className="field">
@@ -587,22 +587,22 @@ const BuatPertanyaan = () => {
                                     <div className="control">
                                         <div className="select mb-4">
                                             <select
-                                                value={jumlahPertanyaanCheckbox}
-                                                onChange={(e) => handleJumlahPertanyaanCheckbox(e)}
+                                                value={numberOfQuestionCheckbox}
+                                                onChange={(e) => handleNumberOfQuestionCheckbox(e)}
                                             >
                                                 {[...Array(9).keys()].map(num => (
                                                     <option key={num + 2} value={num + 2}>{num + 2}</option>
                                                 ))}
                                             </select>
                                         </div>
-                                        {optionPertanyaanCheckbox.map((input, index) => (
+                                        {optionsOfQuestionCheckbox.map((input, index) => (
                                             <div key={index} className="control">
                                                 <input
                                                     className="input"
                                                     type="text"
                                                     placeholder={`Pilihan ${index + 1}`}
                                                     value={input}
-                                                    onChange={(e) => handleOptionPertanyaanCheckbox(index, e)}
+                                                    onChange={(e) => handleOptionOfQuestionCheckbox(index, e)}
                                                 />
                                             </div>
                                         ))}
@@ -613,8 +613,8 @@ const BuatPertanyaan = () => {
 
                         </section>
                         <footer className="modal-card-foot">
-                            <button className="button is-success" onClick={() => tambahPertanyaan()}>Simpan</button>
-                            <button className="button" onClick={() => cancelTambahPertanyaan()}>Batal</button>
+                            <button className="button is-success" onClick={() => tambahQuestion()}>Simpan</button>
+                            <button className="button" onClick={() => cancelAddQuestion()}>Batal</button>
                         </footer>
                     </div>
                 </div>
@@ -622,7 +622,7 @@ const BuatPertanyaan = () => {
 
             {showModalEdit && (
                 <div className="modal is-active">
-                    <div className="modal-background" onClick={() => cancelEditPertanyaan()}></div>
+                    <div className="modal-background" onClick={() => cancelEditQuestion()}></div>
                     <div className="modal-card">
                         <header className="modal-card-head">
                             <p className="modal-card-title has-text-centered">Edit Pertanyaan</p>
@@ -633,10 +633,10 @@ const BuatPertanyaan = () => {
                                 <div className="control">
                                     <div className="select">
                                         <select
-                                            value={jenisPertanyaan}
-                                            onChange={(e) => setJenisPertanyaan(e.target.value)}
+                                            value={questionType}
+                                            onChange={(e) => setQuestionType(e.target.value)}
                                         >
-                                            <option value="">Pilih jenis pertanyaan</option>
+                                            <option value="">Pilih jenis questions</option>
                                             <option value="text">Pertanyaan Singkat</option>
                                             <option value="textarea">Pertanyaan Panjang</option>
                                             <option value="radio">Pertanyaan Pilihan Ganda (Satu Jawaban)</option>
@@ -645,7 +645,7 @@ const BuatPertanyaan = () => {
                                     </div>
                                 </div>
                             </div>
-                            {jenisPertanyaan === "text" && (
+                            {questionType === "text" && (
                                 <div className="field" id="text">
                                     <label className="label">Pertanyaan dengan Jawaban Singkat</label>
                                     <div className="control">
@@ -653,13 +653,13 @@ const BuatPertanyaan = () => {
                                             className="input"
                                             type="text"
                                             placeholder="Masukkan pertanyaan"
-                                            value={inputPertanyaan}
-                                            onChange={(e) => setInputPertanyaan(e.target.value)}
+                                            value={question}
+                                            onChange={(e) => setQuestion(e.target.value)}
                                         />
                                     </div>
                                 </div>
                             )}
-                            {jenisPertanyaan === "textarea" && (
+                            {questionType === "textarea" && (
                                 <div className="field" id="textarea">
                                     <label className="label">Pertanyaan dengan Jawaban Panjang</label>
                                     <div className="control">
@@ -667,13 +667,13 @@ const BuatPertanyaan = () => {
                                             className="input"
                                             type="text"
                                             placeholder="Masukkan pertanyaan"
-                                            value={inputPertanyaan}
-                                            onChange={(e) => setInputPertanyaan(e.target.value)}
+                                            value={question}
+                                            onChange={(e) => setQuestion(e.target.value)}
                                         />
                                     </div>
                                 </div>
                             )}
-                            {jenisPertanyaan === "radio" && (
+                            {questionType === "radio" && (
                                 <div className="field" id="textarea">
                                 <label className="label">Pertanyaan dengan Satu Pilihan Jawaban</label>
                                 <div className="control">
@@ -681,8 +681,8 @@ const BuatPertanyaan = () => {
                                         className="input"
                                         type="text"
                                         placeholder="Masukkan pertanyaan"
-                                        value={inputPertanyaan}
-                                        onChange={(e) => setInputPertanyaan(e.target.value)}
+                                        value={question}
+                                        onChange={(e) => setQuestion(e.target.value)}
                                     />
                                 </div>
                                 <div className="field">
@@ -690,22 +690,22 @@ const BuatPertanyaan = () => {
                                     <div className="control">
                                         <div className="select mb-4">
                                             <select
-                                                value={jumlahPertanyaanRadio}
-                                                onChange={(e) => handleJumlahPertanyaanRadio(e)}
+                                                value={numberOfQuestionRadio}
+                                                onChange={(e) => handleNumberOfQuestionRadio(e)}
                                             >
                                                 {[...Array(9).keys()].map(num => (
                                                     <option key={num + 2} value={num + 2}>{num + 2}</option>
                                                 ))}
                                             </select>
                                         </div>
-                                        {optionPertanyaanRadio.map((input, index) => (
+                                        {optionsOfQuestionRadio.map((input, index) => (
                                             <div key={index} className="control">
                                                 <input
                                                     className="input"
                                                     type="text"
                                                     placeholder={`Pilihan ${index + 1}`}
                                                     value={input}
-                                                    onChange={(e) => handleOptionPertanyaanRadio(index, e)}
+                                                    onChange={(e) => handleOptionOfQuestionRadio(index, e)}
                                                 />
                                             </div>
                                         ))}
@@ -713,7 +713,7 @@ const BuatPertanyaan = () => {
                                 </div>
                             </div>
                             )}
-                            {jenisPertanyaan === "checkbox" && (
+                            {questionType === "checkbox" && (
                                 <div className="field" id="textarea">
                                 <label className="label">Pertanyaan dengan Beberapa Pilihan Jawaban</label>
                                 <div className="control">
@@ -721,8 +721,8 @@ const BuatPertanyaan = () => {
                                         className="input"
                                         type="text"
                                         placeholder="Masukkan pertanyaan"
-                                        value={inputPertanyaan}
-                                        onChange={(e) => setInputPertanyaan(e.target.value)}
+                                        value={question}
+                                        onChange={(e) => setQuestion(e.target.value)}
                                     />
                                 </div>
                                 <div className="field">
@@ -730,22 +730,22 @@ const BuatPertanyaan = () => {
                                     <div className="control">
                                         <div className="select mb-4">
                                             <select
-                                                value={jumlahPertanyaanCheckbox}
-                                                onChange={(e) => handleJumlahPertanyaanCheckbox(e)}
+                                                value={numberOfQuestionCheckbox}
+                                                onChange={(e) => handleNumberOfQuestionCheckbox(e)}
                                             >
                                                 {[...Array(9).keys()].map(num => (
                                                     <option key={num + 2} value={num + 2}>{num + 2}</option>
                                                 ))}
                                             </select>
                                         </div>
-                                        {optionPertanyaanCheckbox.map((input, index) => (
+                                        {optionsOfQuestionCheckbox.map((input, index) => (
                                             <div key={index} className="control">
                                                 <input
                                                     className="input"
                                                     type="text"
                                                     placeholder={`Pilihan ${index + 1}`}
                                                     value={input}
-                                                    onChange={(e) => handleOptionPertanyaanCheckbox(index, e)}
+                                                    onChange={(e) => handleOptionOfQuestionCheckbox(index, e)}
                                                 />
                                             </div>
                                         ))}
@@ -756,8 +756,8 @@ const BuatPertanyaan = () => {
 
                         </section>
                         <footer className="modal-card-foot">
-                            <button className="button is-success" onClick={() => editPertanyaan()}>Simpan</button>
-                            <button className="button" onClick={() => cancelEditPertanyaan()}>Batal</button>
+                            <button className="button is-success" onClick={() => editQuestion()}>Simpan</button>
+                            <button className="button" onClick={() => cancelEditQuestion()}>Batal</button>
                         </footer>
                     </div>
                 </div>
@@ -767,4 +767,4 @@ const BuatPertanyaan = () => {
     );
 };
 
-export default BuatPertanyaan;
+export default CreateQuestion;

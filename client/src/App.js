@@ -1,47 +1,47 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import BerandaMahasiswa from './components/mahasiswa/BerandaMahasiswa';
-import BerandaDosen from './components/dosen/BerandaDosen';
-import DetailLowonganPekerjaan from './components/mahasiswa/DetailLowonganPekerjaan';
-import DetailLowonganPekerjaanDosen from './components/dosen/DetailLowonganPekerjaanDosen';
-import LoginMhs from './components/login/LoginMhs';
-import LoginDosen from './components/login/LoginDosen';
-import { MahasiswaContextProvider } from './context/MahasiswaContext';
-import { DosenContextProvider } from './context/DosenContext';
-import Profil from './components/mahasiswa/Profil';
-import BuatLowonganPekerjaan from './components/dosen/BuatLowonganPekerjaan';
-import BuatPertanyaan from './components/dosen/BuatPertanyaan';
+import HomeStudent from './components/student/HomeStudent';
+import HomeLecturer from './components/lecturer/HomeLecturer';
+import DetailLaborJob from './components/student/DetailLaborJob';
+import DetailLaborJobLecturer from './components/lecturer/DetailLaborJobLecturer';
+import LoginStudent from './components/login/LoginStudent';
+import LoginLecturer from './components/login/LoginLecturer';
+import { StudentContextProvider } from './context/StudentContext';
+import { LecturerContextProvider } from './context/LecturerContext';
+import Profile from './components/student/Profile';
+import CreateLaborJob from './components/lecturer/CreateLaborJob';
+import CreateQuestion from './components/lecturer/CreateQuestion';
 import "./App.css";
-import ProsesLamarMahasiswa from './components/mahasiswa/ProsesLamarMahasiswa';
+import ApplicationProcess from './components/student/ApplicationProcess';
 
 const App = () => {
   return (
     <BrowserRouter>
-      <MahasiswaContextProvider>
+      <StudentContextProvider>
         <Routes>
-          <Route path='/mhs/*'>
-            <Route path='login' element={<LoginMhs />} />
-            <Route path='home' element={<BerandaMahasiswa />} />
-            <Route path='profil' element={<Profil />} />
-            <Route path='lowongan/:id' element={<DetailLowonganPekerjaan />} />
-            <Route path='lowongan/:id/lamar' element={<ProsesLamarMahasiswa />} />
+          <Route path='/student/*'>
+            <Route path='login' element={<LoginStudent />} />
+            <Route path='' element={<HomeStudent />} />
+            <Route path='profile' element={<Profile />} />
+            <Route path='labor-job/:id' element={<DetailLaborJob />} />
+            <Route path='labor-job/:id/apply' element={<ApplicationProcess />} />
           </Route>
         </Routes>
-      </MahasiswaContextProvider>
+      </StudentContextProvider>
       
-      <DosenContextProvider>
+      <LecturerContextProvider>
         <Routes>
-          <Route path='/dosen/*'>
-            <Route path='login' element={<LoginDosen />} />
-            <Route path='home' element={<BerandaDosen />} />
-            <Route path='lowongan/:id' element={<DetailLowonganPekerjaanDosen />} />
-            <Route path='lowongan/create' element={<BuatLowonganPekerjaan />} />
-            <Route path='lowongan/create/pertanyaan' element={<BuatPertanyaan />} />
+          <Route path='/lecturer/*'>
+            <Route path='login' element={<LoginLecturer />} />
+            <Route path='' element={<HomeLecturer />} />
+            <Route path='labor-job/:id' element={<DetailLaborJobLecturer />} />
+            <Route path='labor-job/create' element={<CreateLaborJob />} />
+            <Route path='labor-job/create/questions' element={<CreateQuestion />} />
           </Route>
         </Routes>
-      </DosenContextProvider>
+      </LecturerContextProvider>
 
       <Routes>
-        <Route path="/" element={<Navigate to="/mhs/login" />} />
+        <Route path="/" element={<Navigate to="/student/login" />} />
       </Routes>
     </BrowserRouter>
   );

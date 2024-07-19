@@ -3,27 +3,27 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const LoginMhs = () => {
-  const [nim, setNim] = useState('');
+const LoginLecturer = () => {
+  const [nip, setNip] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      if (!nim || !password) {
-        setError('NIM dan password harus diisi');
+      if (!nip || !password) {
+        setError('NIP dan password harus diisi');
         return;
       }
 
-      const response = await axios.post('http://localhost:5000/mhs/login', { nim, password }, { withCredentials: true });
+      const response = await axios.post('http://localhost:5000/lecturer/login', { nip, password }, { withCredentials: true });
 
       if (response.status === 200) {
         if (response.data.token) {
           localStorage.setItem('token', response.data.token);
-          window.location.href = '/mhs/home';
+          window.location.href = '/lecturer/home';
         } else {
-          setError('NIM atau password salah.');
+          setError('NIP atau password salah.');
         }
       } else {
         setError('Login gagal. Terjadi kesalahan saat menghubungi server.');
@@ -41,17 +41,17 @@ const LoginMhs = () => {
       <div className="columns is-centered">
         <div className="column is-one-third">
           <div className="box mt-6">
-            <h1 className="title has-text-centered">Login Mahasiswa</h1>
+            <h1 className="title has-text-centered">Login Dosen</h1>
             {error && <p className="has-text-danger has-text-centered">{error}</p>}
             <div className="field">
-              <label className="label">NIM</label>
+              <label className="label">NIP</label>
               <div className="control">
                 <input
                   className="input"
                   type="text"
-                  placeholder="Masukkan NIM anda"
-                  value={nim}
-                  onChange={(e) => setNim(e.target.value)}
+                  placeholder="Masukkan NIP anda"
+                  value={nip}
+                  onChange={(e) => setNip(e.target.value)}
                 />
               </div>
             </div>
@@ -78,7 +78,7 @@ const LoginMhs = () => {
             </div>
 
             <div className="has-text-centered">
-              <p>Atau <Link to="/dosen/login">login sebagai dosen</Link></p>
+              <p>Atau <Link to="/mhs/login">login sebagai mahasiswa</Link></p>
             </div>
 
           </div>
@@ -88,4 +88,4 @@ const LoginMhs = () => {
   );
 };
 
-export default LoginMhs;
+export default LoginLecturer;

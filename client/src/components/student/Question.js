@@ -1,30 +1,30 @@
 import React from 'react';
 
-const PertanyaanUmum = ({ item, index }) => {
+const Question = ({ item, index }) => {
     return (
         <div className="columns is-flex">
             <div className="column">
-                {item.jenisPertanyaan === "text" && (
+                {item.type === "text" && (
                     <div className="field">
-                        <label className="label">{index + 1}. {item.inputPertanyaan}</label>
+                        <label className="label">{index + 1}. {item.question}</label>
                         <div className="control">
                             <input className="input" type="text" placeholder="Masukkan jawaban Anda" />
                         </div>
                     </div>
                 )}
-                {item.jenisPertanyaan === "textarea" && (
+                {item.type === "textarea" && (
                     <div className="field">
-                        <label className="label">{index + 1}. {item.inputPertanyaan}</label>
+                        <label className="label">{index + 1}. {item.question}</label>
                         <div className="control">
                             <textarea className="textarea" placeholder="Masukkan jawaban Anda"></textarea>
                         </div>
                     </div>
                 )}
-                {item.jenisPertanyaan === "radio" && (
+                {item.type === "radio" && (
                     <div className="field">
-                        <label className="label">{index + 1}. {item.inputPertanyaan}</label>
+                        <label className="label">{index + 1}. {item.question}</label>
                         <div className="control">
-                            {item.optionPertanyaanRadio.map((option, optionIndex) => (
+                            {item.optionsOfQuestionRadio.map((option, optionIndex) => (
                                 <React.Fragment key={optionIndex}>
                                     <label className="radio is-inline">
                                         <input type="radio" />
@@ -35,11 +35,11 @@ const PertanyaanUmum = ({ item, index }) => {
                         </div>
                     </div>
                 )}
-                {item.jenisPertanyaan === "checkbox" && (
+                {item.type === "checkbox" && (
                     <div className="field">
-                        <label className="label">{index + 1}. {item.inputPertanyaan}</label>
+                        <label className="label">{index + 1}. {item.question}</label>
                         <div className="control">
-                            {item.optionPertanyaanCheckbox.map((option, optionIndex) => (
+                            {item.optionsOfQuestionCheckbox.map((option, optionIndex) => (
                                 <React.Fragment key={optionIndex}>
                                     <label className="checkbox is-inline">
                                         <input type="checkbox" />
@@ -55,4 +55,4 @@ const PertanyaanUmum = ({ item, index }) => {
     );
 };
 
-export default PertanyaanUmum;
+export default Question;

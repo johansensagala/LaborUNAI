@@ -1,22 +1,20 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
-import { useContext } from "react";
-import { MahasiswaContext } from "../context/MahasiswaContext";
-import { DosenContext } from "../context/DosenContext";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { LecturerContext } from "../context/LecturerContext";
+import { StudentContext } from "../context/StudentContext";
 
 const Navbar = () => {
-    const { mahasiswa } = useContext(MahasiswaContext);
-    const { dosen } = useContext(DosenContext);
+    const { student } = useContext(StudentContext);
+    const { lecturer } = useContext(LecturerContext);
     const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
-            await fetch('http://localhost:5000/mhs/logout', {
+            await fetch('http://localhost:5000/student/logout', {
                 method: 'GET',
                 credentials: 'include',
             });
-            window.location.href = '/mhs/login';
+            window.location.href = '/student/login';
         } catch (error) {
             console.error('Error during logout:', error);
         }
@@ -25,7 +23,7 @@ const Navbar = () => {
     return (
         <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
             <div className="navbar-brand">
-                <Link to="/mhs/home" className="navbar-item">
+                <Link to="/student/home" className="navbar-item">
                     <img src={require('../assets/images/logo2.png')} alt="Bulma Logo" />
                 </Link>
 
@@ -38,13 +36,13 @@ const Navbar = () => {
 
             <div id="navbarBasicExample" className="navbar-menu">
                 <div className="navbar-start">
-                    {mahasiswa && typeof mahasiswa === "object" && (
-                        <Link to="/mhs/home" className="navbar-item">
+                    {student && typeof student === "object" && (
+                        <Link to="/student/home" className="navbar-item">
                             Home Mahasiswa
                         </Link>
                     )}
-                    {dosen && typeof dosen === "object" && (
-                        <Link to="/dosen/home" className="navbar-item">
+                    {lecturer && typeof lecturer === "object" && (
+                        <Link to="/lecturer/home" className="navbar-item">
                             Home Dosen
                         </Link>
                     )}
@@ -64,28 +62,28 @@ const Navbar = () => {
                 <div className="navbar-end">
                     <div className="navbar-item">
                         <div className="buttons">
-                            {(mahasiswa && typeof mahasiswa === "object") || (dosen && typeof dosen === "object") ? (
+                            {(student && typeof student === "object") || (lecturer && typeof lecturer === "object") ? (
                                 <div className="navbar-item has-dropdown is-hoverable">
                                     <div className="navbar-link">
-                                        {mahasiswa ? mahasiswa.nama : dosen.nama}
+                                        {student ? student.name : lecturer.name}
                                     </div>
                                     <div className="navbar-dropdown">
-                                        {mahasiswa && typeof mahasiswa === "object" && (
+                                        {student && typeof student === "object" && (
                                             <>
-                                                <Link className="navbar-item" to="/mhs/profil">
+                                                <Link className="navbar-item" to="/student/profil">
                                                     Profile
                                                 </Link>
-                                                <Link className="navbar-item" to="/mhs/logout" onClick={handleLogout}>
+                                                <Link className="navbar-item" to="/student/logout" onClick={handleLogout}>
                                                     Log out
                                                 </Link>
                                             </>
                                         )}
-                                        {dosen && typeof dosen === "object" && (
+                                        {lecturer && typeof lecturer === "object" && (
                                             <>
-                                                <Link className="navbar-item" to="/dosen/profil">
+                                                <Link className="navbar-item" to="/lecturer/profil">
                                                     Profile
                                                 </Link>
-                                                <Link className="navbar-item" to="/dosen/logout" onClick={handleLogout}>
+                                                <Link className="navbar-item" to="/lecturer/logout" onClick={handleLogout}>
                                                     Log out
                                                 </Link>
                                             </>
@@ -94,7 +92,7 @@ const Navbar = () => {
                                 </div>
                             ) : (
                                 <div className="navbar-item">
-                                    <Link to="/mhs/login" className="button is-light is-size-5">
+                                    <Link to="/student/login" className="button is-light is-size-5">
                                         Log in
                                     </Link>
                                 </div>
