@@ -103,7 +103,7 @@ router.route('/department')
 router.route('/student/login')
   .post(loginStudent);
 
-router.route('/student')
+router.route('/student-data')
   .get(getStudent);
 
 router.route('/student/logout')
@@ -112,7 +112,7 @@ router.route('/student/logout')
 router.route('/lecturer/login')
   .post(loginLecturer);
 
-router.route('/lecturer')
+router.route('/lecturer-data')
   .get(getLecturer);
 
 router.route('/lecturer/logout')

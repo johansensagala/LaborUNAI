@@ -26,7 +26,7 @@ const getApplicationByStudentAndLaborJob = async (req, res) => {
     const { studentId, laborJobId } = req.params;
 
     try {
-        const application = await Application.findOne({ studentId, laborJobId });
+        const application = await Application.findOne({ student: studentId, laborJob: laborJobId });
         if (!application) {
             return res.status(404).json({ message: 'Application not found' });
         }
@@ -72,8 +72,8 @@ const startApply = async (req, res) => {
         const skills = student.skills || "";
 
         const application = new Application({
-            studentId,
-            laborJobId,
+            student: studentId,
+            laborJob: laborJobId,
             skills,
         });
 

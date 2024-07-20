@@ -26,7 +26,7 @@ const LaborJobDetailStudent = () => {
             const response = await axios.get(`http://localhost:5000/labor-job/${id}`);
             setLaborJob(response.data);
     
-            getDepartmentName(response.data.departemenId);
+            getDepartmentName(response.data.department);
         } catch (error) {
             console.error("Error fetching data:", error);
         }

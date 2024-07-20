@@ -8,7 +8,7 @@ export function StudentContextProvider({children}) {
 
     useEffect(() => {
         if (!student) {
-            axios.get('http://localhost:5000/student', { withCredentials: true }).then(({data}) => {
+            axios.get('http://localhost:5000/student-data', { withCredentials: true }).then(({data}) => {
                 setStudent(data);
             });
         }

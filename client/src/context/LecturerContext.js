@@ -8,7 +8,7 @@ export function LecturerContextProvider({children}) {
 
     useEffect(() => {
         if (!lecturer) {
-            axios.get('http://localhost:5000/lecturer', { withCredentials: true }).then(({data}) => {
+            axios.get('http://localhost:5000/lecturer-data', { withCredentials: true }).then(({data}) => {
                 setLecturer(data);
             });
         }
