@@ -1,22 +1,22 @@
 import axios from "axios";
-import { createContext, useState, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 
-export const MahasiswaContext = createContext({});
+export const StudentContext = createContext({});
 
-export function MahasiswaContextProvider({children}) {
-    const [mahasiswa, setMahasiswa] = useState(null);
+export function StudentContextProvider({children}) {
+    const [student, setStudent] = useState(null);
 
     useEffect(() => {
-        if (!mahasiswa) {
-            axios.get('http://localhost:5000/mhs', { withCredentials: true }).then(({data}) => {
-                setMahasiswa(data);
+        if (!student) {
+            axios.get('http://localhost:5000/student', { withCredentials: true }).then(({data}) => {
+                setStudent(data);
             });
         }
     }, [])
 
     return (
-        <MahasiswaContext.Provider value={{ mahasiswa, setMahasiswa }}>
+        <StudentContext.Provider value={{ student, setStudent }}>
             {children}
-        </MahasiswaContext.Provider>
+        </StudentContext.Provider>
     )
 }

@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import Navbar from "../../layouts/Navbar";
 
-const LaborJobDetail = () => {
+const LaborJobDetailLecturer = () => {
     const [laborJob, setLaborJob] = useState({});
     const { id } = useParams();
     const [departmentName, setDepartmentName] = useState('');
@@ -28,10 +28,10 @@ const LaborJobDetail = () => {
 
     const getDepartmentName = async (departemenId) => {
         try {
-            const response = await axios.get(`http://localhost:5000/departemen/${departemenId}`);
+            const response = await axios.get(`http://localhost:5000/department/${departemenId}`);
             setDepartmentName(response.data.departmentName);
         } catch (error) {
-            console.error("Error fetching departemen data:", error);
+            console.error("Error fetching department data:", error);
         }
     };
 
@@ -95,4 +95,4 @@ const LaborJobDetail = () => {
     );
 };
 
-export default LaborJobDetail;
+export default LaborJobDetailLecturer;

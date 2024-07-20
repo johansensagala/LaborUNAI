@@ -4,7 +4,7 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 
-import { getAllApplication, getApplication, getApplicationByStudentAndLaborJob, saveApplication, startLamar } from './controllers/ApplicationController.js';
+import { getAllApplication, getApplication, getApplicationByStudentAndLaborJob, saveApplication, startApply } from './controllers/ApplicationController.js';
 import { getDepartment, getDepartmentByLecturer, saveDepartment } from './controllers/DepartmentController.js';
 import { getAllExpertiseGroup, saveExpertiseGroup } from './controllers/ExpertiseGroupController.js';
 import { getAllFaculty, saveFaculty } from './controllers/FacultyController.js';
@@ -86,7 +86,7 @@ router.route('/application/:id')
 
 router.route('/application/:studentId/:laborJobId')
   .get(getApplicationByStudentAndLaborJob)
-  .post(startLamar);
+  .post(startApply);
 
 router.route('/labor-job/lecturer/:id')
   .get(getLaborJobByLecturer);
@@ -94,7 +94,7 @@ router.route('/labor-job/lecturer/:id')
 router.route('/department/:id')
   .get(getDepartment);
 
-router.route('/department/dosen/:id')
+router.route('/department/lecturer/:id')
   .get(getDepartmentByLecturer);
 
 router.route('/department')

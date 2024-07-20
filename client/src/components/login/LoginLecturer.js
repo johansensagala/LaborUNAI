@@ -21,7 +21,7 @@ const LoginLecturer = () => {
       if (response.status === 200) {
         if (response.data.token) {
           localStorage.setItem('token', response.data.token);
-          window.location.href = '/lecturer/home';
+          window.location.href = '/lecturer';
         } else {
           setError('NIP atau password salah.');
         }

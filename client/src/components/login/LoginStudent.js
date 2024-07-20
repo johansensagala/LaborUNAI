@@ -21,7 +21,7 @@ const LoginStudent = () => {
       if (response.status === 200) {
         if (response.data.token) {
           localStorage.setItem('token', response.data.token);
-          window.location.href = '/student/home';
+          window.location.href = '/student';
         } else {
           setError('NIM atau password salah.');
         }

@@ -84,5 +84,5 @@ const startApply = async (req, res) => {
     }
 }
 
-export { getAllApplication, getApplication, saveApplication, startApply };
+export { getAllApplication, getApplication, getApplicationByStudentAndLaborJob, saveApplication, startApply };
 

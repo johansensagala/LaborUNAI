@@ -30,10 +30,10 @@ const LaborJob = () => {
 
   const getDepartmentName = async (departmentId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/departemen/${departmentId}`);
+      const response = await axios.get(`http://localhost:5000/department/${departmentId}`);
       return response.data.departmentName;
     } catch (error) {
-      console.error("Error fetching departemen data:", error);
+      console.error("Error fetching department data:", error);
     }
   };
 

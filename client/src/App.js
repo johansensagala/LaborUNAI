@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import HomeStudent from './components/student/HomeStudent';
 import HomeLecturer from './components/lecturer/HomeLecturer';
-import DetailLaborJob from './components/student/DetailLaborJob';
-import DetailLaborJobLecturer from './components/lecturer/DetailLaborJobLecturer';
+import LaborJobDetailStudent from './components/student/LaborJobDetailStudent';
+import LaborJobDetailLecturer from './components/lecturer/LaborJobDetailLecturer';
 import LoginStudent from './components/login/LoginStudent';
 import LoginLecturer from './components/login/LoginLecturer';
 import { StudentContextProvider } from './context/StudentContext';
@@ -22,7 +22,7 @@ const App = () => {
             <Route path='login' element={<LoginStudent />} />
             <Route path='' element={<HomeStudent />} />
             <Route path='profile' element={<Profile />} />
-            <Route path='labor-job/:id' element={<DetailLaborJob />} />
+            <Route path='labor-job/:id' element={<LaborJobDetailStudent />} />
             <Route path='labor-job/:id/apply' element={<ApplicationProcess />} />
           </Route>
         </Routes>
@@ -33,7 +33,7 @@ const App = () => {
           <Route path='/lecturer/*'>
             <Route path='login' element={<LoginLecturer />} />
             <Route path='' element={<HomeLecturer />} />
-            <Route path='labor-job/:id' element={<DetailLaborJobLecturer />} />
+            <Route path='labor-job/:id' element={<LaborJobDetailLecturer />} />
             <Route path='labor-job/create' element={<CreateLaborJob />} />
             <Route path='labor-job/create/questions' element={<CreateQuestion />} />
           </Route>

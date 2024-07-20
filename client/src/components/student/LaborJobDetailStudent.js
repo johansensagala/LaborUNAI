@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { StudentContext } from '../../context/StudentContext';
 import Navbar from "../../layouts/Navbar";
 
-const LaborJob = () => {
+const LaborJobDetailStudent = () => {
     const { student } = useContext(StudentContext);
     const [laborJob, setLaborJob] = useState({});
     const [application, setApplication] = useState({});
@@ -23,7 +23,7 @@ const LaborJob = () => {
     
     const getLaborJob = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/lowongan-labor/${id}`);
+            const response = await axios.get(`http://localhost:5000/labor-job/${id}`);
             setLaborJob(response.data);
     
             getDepartmentName(response.data.departemenId);
@@ -34,7 +34,7 @@ const LaborJob = () => {
 
     const getDepartmentName = async (departemenId) => {
         try {
-            const response = await axios.get(`http://localhost:5000/departemen/${departemenId}`);
+            const response = await axios.get(`http://localhost:5000/department/${departemenId}`);
             setDepartmentName(response.data.departmentName);
         } catch (error) {
             console.error("Error fetching department data:", error);
@@ -125,4 +125,4 @@ const LaborJob = () => {
     );
 };
 
-export default LaborJob;
+export default LaborJobDetailStudent;

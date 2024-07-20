@@ -1,22 +1,22 @@
 import axios from "axios";
-import { createContext, useState, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 
-export const DosenContext = createContext({});
+export const LecturerContext = createContext({});
 
-export function DosenContextProvider({children}) {
-    const [dosen, setDosen] = useState(null);
+export function LecturerContextProvider({children}) {
+    const [lecturer, setLecturer] = useState(null);
 
     useEffect(() => {
-        if (!dosen) {
-            axios.get('http://localhost:5000/dosen', { withCredentials: true }).then(({data}) => {
-                setDosen(data);
+        if (!lecturer) {
+            axios.get('http://localhost:5000/lecturer', { withCredentials: true }).then(({data}) => {
+                setLecturer(data);
             });
         }
     }, [])
 
     return (
-        <DosenContext.Provider value={{ dosen, setDosen }}>
+        <LecturerContext.Provider value={{ lecturer, setLecturer }}>
             {children}
-        </DosenContext.Provider>
+        </LecturerContext.Provider>
     )
 }
