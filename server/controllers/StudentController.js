@@ -78,7 +78,7 @@ const getCv = async (req, res) => {
             return res.status(404).json({ message: "Student not found." });
         }
 
-        const cv = student.cv && student.cv.fileName ? "public/cv/" + student.cv.fileName : null;
+        const cv = student.cv && student.cv.fileName ? "public/cvProfile/" + student.cv.fileName : null;
 
         res.status(200).json(cv);
     } catch (e) {
@@ -126,7 +126,7 @@ const uploadCv = async (req, res, next) => {
 
 const sendCv = async (req, res) => {
     try {
-        const cvDir = path.join(__dirname, 'files/cv');
+        const cvDir = path.join(__dirname, 'files/cvProfile');
 
         const { filename } = req.params;
         const filePath = path.join(cvDir, filename);

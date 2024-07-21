@@ -84,5 +84,66 @@ const startApply = async (req, res) => {
     }
 }
 
-export { getAllApplication, getApplication, getApplicationByStudentAndLaborJob, saveApplication, startApply };
+const setNote = async (req, res) => {
+    const { studentId, laborJobId } = req.params;
+
+    if (!studentId || !laborJobId) {
+        return res.status(400).json({ message: "Please fulfill studentId and laborJobId." });
+    }
+
+    try {
+        const student = await Student.findById(studentId);
+        if (!student) {
+            return res.status(404).json({ message: "Student not found." });
+        }
+
+        const application = await Application.findOne({ student: studentId, laborJob: laborJobId });
+        if (!application) {
+            return res.status(404).json({ message: "Application not found." });
+        }
+
+        application.note = req.body.note;
+        await application.save();
+
+        res.status(200).json({ message: "Note updated successfully.", application });
+    } catch (e) {
+        res.status(400).json({ message: e.message });
+    }
+}
+
+const setCv = async (req, res) => {
+    const { studentId, laborJobId } = req.params;
+
+    if (!studentId || !laborJobId) {
+        return res.status(400).json({ message: "Please fulfill studentId and laborJobId." });
+    }
+
+    try {
+        const application = await Application.findOne({ student: studentId, laborJob: laborJobId });
+        if (!application) {
+            return res.status(404).json({ message: "Application not found." });
+        }
+
+        if (req.file) {
+            const { originalname, mimetype, size, filename } = req.file;
+
+            application.cv = {
+                originalName: originalname,
+                mimeType: mimetype,
+                size: size,
+                fileName: filename
+            };
+
+            await application.save();
+            res.status(200).json({ message: "CV uploaded successfully.", application });
+        } else {
+            res.status(400).json({ message: "No file uploaded." });
+        }
+    } catch (e) {
+        console.error(e.message); // Log error for debugging
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
+
+export { getAllApplication, getApplication, getApplicationByStudentAndLaborJob, saveApplication, setNote, startApply, setCv };
 

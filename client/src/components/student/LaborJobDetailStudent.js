@@ -8,27 +8,44 @@ import Navbar from "../../layouts/Navbar";
 
 const LaborJobDetailStudent = () => {
     const { student } = useContext(StudentContext);
+    const { id } = useParams();
+
     const [laborJob, setLaborJob] = useState({});
     const [application, setApplication] = useState({});
-    const { id } = useParams();
+    const [hasApplied, setHasApplied] = useState(false);
     const [departmentName, setDepartmentName] = useState('');
-    const [skill, setSkill] = useState([]);
 
     const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
-        getLaborJob();
-    }, []);
-    
+        if (student && student.id) {
+            getLaborJob();
+            checkStudentApplication();
+        }
+    }, [student]);    
+
+    const checkStudentApplication = async () => {
+        try {
+            if (student && student.id) {
+                const applicationResult = await findApplication();
+                setApplication(applicationResult);
+                setHasApplied(!!applicationResult._id);
+            } else {
+                console.error("Student data is not available");
+            }
+        } catch (error) {
+            console.error("Error checking student application:", error);
+        }
+    };    
+
     const getLaborJob = async () => {
         try {
             const response = await axios.get(`http://localhost:5000/labor-job/${id}`);
             setLaborJob(response.data);
-    
             getDepartmentName(response.data.department);
         } catch (error) {
-            console.error("Error fetching data:", error);
+            console.error("Error fetching labor job data:", error);
         }
     };
 
@@ -43,9 +60,9 @@ const LaborJobDetailStudent = () => {
 
     const startApply = async () => {
         try {
-            const response = await axios.post(`http://localhost:5000/application/${student.id}/${id}`);
+            await axios.post(`http://localhost:5000/application/${student.id}/${id}`);
         } catch (error) {
-            console.error("Error fetching departemen data:", error);
+            console.error("Error starting application:", error);
         }
     };
 
@@ -54,10 +71,10 @@ const LaborJobDetailStudent = () => {
             const response = await axios.get(`http://localhost:5000/application/${student.id}/${id}`);
             return response.data;
         } catch (error) {
-            console.error("Error fetching data:", error);
+            console.error("Error fetching application data:", error);
             throw error;
         }
-    };    
+    };
 
     const handleApplyClick = () => {
         Swal.fire({
@@ -72,18 +89,20 @@ const LaborJobDetailStudent = () => {
                 handleApplyProcess();
             }
         });
-    };    
+    };
 
     const handleApplyProcess = async () => {
         try {
-            const applicationData = await startApply();
-            const applicationResult = await findApplication();
-            setApplication(applicationResult);
+            if (!hasApplied) {
+                await startApply();
+
+                const applicationResult = await findApplication();
+                setApplication(applicationResult);
+            }
 
             navigate(`/student/labor-job/${id}/apply`, { 
                 state: { 
                     laborJob: laborJob,
-                    application: applicationResult
                 } 
             });
         } catch (error) {
@@ -116,9 +135,15 @@ const LaborJobDetailStudent = () => {
                         ))}
                     </ul>
 
-                    <div className="buttons is-centered mt-5">
-                        <button className="button is-primary" onClick={handleApplyClick}>Lamar Sekarang</button>
-                    </div>
+                    {!hasApplied ? (
+                        <div className="buttons is-centered mt-5">
+                            <button className="button is-primary" onClick={handleApplyClick}>Lamar Sekarang</button>
+                        </div>
+                    ) : (
+                        <div className="buttons is-centered mt-5">
+                            <button className="button is-primary" onClick={handleApplyProcess}>Lanjutkan lamaran</button>
+                        </div>
+                    )}
                 </div>
             </div>
         </>

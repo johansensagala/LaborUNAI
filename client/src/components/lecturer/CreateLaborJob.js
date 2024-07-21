@@ -61,7 +61,9 @@ const CreateLaborJob = () => {
                 available: true,
                 questions
             });
+
             console.log("Lowongan berhasil disimpan:", response.data);
+            
             Swal({
                 title: "Sukses!",
                 text: "Lowongan berhasil disimpan.",

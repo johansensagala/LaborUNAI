@@ -4,7 +4,7 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 
-import { getAllApplication, getApplication, getApplicationByStudentAndLaborJob, saveApplication, startApply } from './controllers/ApplicationController.js';
+import { getAllApplication, getApplication, getApplicationByStudentAndLaborJob, saveApplication, startApply, setNote, setCv } from './controllers/ApplicationController.js';
 import { getDepartment, getDepartmentByLecturer, saveDepartment } from './controllers/DepartmentController.js';
 import { getAllExpertiseGroup, saveExpertiseGroup } from './controllers/ExpertiseGroupController.js';
 import { getAllFaculty, saveFaculty } from './controllers/FacultyController.js';
@@ -18,18 +18,46 @@ import { getStudent, loginStudent, logoutStudent } from './controllers/StudentLo
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: './files/cv/',
+const storageCvProfile = multer.diskStorage({
+  destination: './files/cvProfile/',
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   }
 });
 
-const uploadCvProfile = multer({ storage: storage });
-const uploadCvApplication = multer({ storage: storage });
-const uploadAvatar = multer({ storage: storage });
-const uploadAnswerImage = multer({ storage: storage });
-const uploadQuestionImage = multer({ storage: storage });
+const storageCvApplication = multer.diskStorage({
+  destination: './files/cvApplication/',
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+const storageAvatar = multer.diskStorage({
+  destination: './files/avatar/',
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+const storageAnswerImage = multer.diskStorage({
+  destination: './files/answerImage/',
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+const storageQuestionImage = multer.diskStorage({
+  destination: './files/questionImage/',
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+const uploadCvProfile = multer({ storage: storageCvProfile });
+const uploadCvApplication = multer({ storage: storageCvApplication });
+const uploadAvatar = multer({ storage: storageAvatar });
+const uploadAnswerImage = multer({ storage: storageAnswerImage });
+const uploadQuestionImage = multer({ storage: storageQuestionImage });
 
 router.use(
   cors({
@@ -77,6 +105,7 @@ router.route('/labor-job/:id')
   .get(getLaborJob)
   .put(updateLaborJob);
 
+// ApplicationController
 router.route('/application')
   .get(getAllApplication)
   .post(saveApplication);
@@ -87,6 +116,14 @@ router.route('/application/:id')
 router.route('/application/:studentId/:laborJobId')
   .get(getApplicationByStudentAndLaborJob)
   .post(startApply);
+
+router.route('/application/set-note/:studentId/:laborJobId')
+  .post(setNote);
+
+router.route('/application/upload-cv/:studentId/:laborJobId')
+  .post(uploadCvApplication.single('cv'), setCv);
+
+
 
 router.route('/labor-job/lecturer/:id')
   .get(getLaborJobByLecturer);

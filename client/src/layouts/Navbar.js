@@ -23,9 +23,16 @@ const Navbar = () => {
     return (
         <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
             <div className="navbar-brand">
-                <Link to="/student/home" className="navbar-item">
-                    <img src={require('../assets/images/logo2.png')} alt="Bulma Logo" />
-                </Link>
+                {student && typeof student === "object" && (
+                    <Link to="/student" className="navbar-item">
+                        <img src={require('../assets/images/logo2.png')} alt="Bulma Logo" />
+                    </Link>
+                )}
+                {lecturer && typeof lecturer === "object" && (
+                    <Link to="/lecturer" className="navbar-item">
+                        <img src={require('../assets/images/logo2.png')} alt="Bulma Logo" />
+                    </Link>
+                )}
 
                 <Link to="/" role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                     <span aria-hidden="true"></span>
@@ -37,12 +44,12 @@ const Navbar = () => {
             <div id="navbarBasicExample" className="navbar-menu">
                 <div className="navbar-start">
                     {student && typeof student === "object" && (
-                        <Link to="/student/home" className="navbar-item">
+                        <Link to="/student" className="navbar-item">
                             Home Mahasiswa
                         </Link>
                     )}
                     {lecturer && typeof lecturer === "object" && (
-                        <Link to="/lecturer/home" className="navbar-item">
+                        <Link to="/lecturer" className="navbar-item">
                             Home Dosen
                         </Link>
                     )}
@@ -70,7 +77,7 @@ const Navbar = () => {
                                     <div className="navbar-dropdown">
                                         {student && typeof student === "object" && (
                                             <>
-                                                <Link className="navbar-item" to="/student/profil">
+                                                <Link className="navbar-item" to="/student/profile">
                                                     Profile
                                                 </Link>
                                                 <Link className="navbar-item" to="/student/logout" onClick={handleLogout}>
@@ -80,7 +87,7 @@ const Navbar = () => {
                                         )}
                                         {lecturer && typeof lecturer === "object" && (
                                             <>
-                                                <Link className="navbar-item" to="/lecturer/profil">
+                                                <Link className="navbar-item" to="/lecturer/profile">
                                                     Profile
                                                 </Link>
                                                 <Link className="navbar-item" to="/lecturer/logout" onClick={handleLogout}>
