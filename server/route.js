@@ -4,11 +4,11 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 
-import { getAllApplication, getApplication, getApplicationByStudentAndLaborJob, saveApplication, startApply, setNote, setCv } from './controllers/ApplicationController.js';
+import { getAllApplication, getApplication, getApplicationByStudentAndLaborJob, saveApplication, startApply, setNote, setCv, setCvInProfile, setGeneralQuestionAnswers, startTest, setTestAnswers } from './controllers/ApplicationController.js';
 import { getDepartment, getDepartmentByLecturer, saveDepartment } from './controllers/DepartmentController.js';
 import { getAllExpertiseGroup, saveExpertiseGroup } from './controllers/ExpertiseGroupController.js';
 import { getAllFaculty, saveFaculty } from './controllers/FacultyController.js';
-import { getAllGeneralQuestion, saveGeneralQuestion, saveManyGeneralQuestion } from './controllers/GeneralQuestionController.js';
+import { getAllGeneralQuestion, saveGeneralQuestion, saveManyGeneralQuestion, getQuestionByCode } from './controllers/GeneralQuestionController.js';
 import { getAllLaborJob, getLaborJob, getLaborJobByLecturer, saveLaborJob, updateLaborJob } from './controllers/LaborJobController.js';
 import { getAllLecturer, saveLecturer } from './controllers/LecturerController.js';
 import { getLecturer, loginLecturer, logoutLecturer } from './controllers/LecturerLoginController.js';
@@ -78,12 +78,23 @@ router.route('/major')
   .get(getAllMajor)
   .post(saveMajor);
 
+
+// GeneralQuestionController
 router.route('/general-question')
   .get(getAllGeneralQuestion)
   .post(saveGeneralQuestion);
 
 router.route('/general-question/save-many')
   .post(saveManyGeneralQuestion);
+
+router.route('/general-question/:code')
+  .get(getQuestionByCode);
+
+
+
+
+
+
 
 router.route('/faculty')
   .get(getAllFaculty)
@@ -122,6 +133,22 @@ router.route('/application/set-note/:studentId/:laborJobId')
 
 router.route('/application/upload-cv/:studentId/:laborJobId')
   .post(uploadCvApplication.single('cv'), setCv);
+
+router.route('/application/upload-cv-in-profile/:studentId/:laborJobId')
+  .post(uploadCvApplication.single('cv'), setCvInProfile);
+
+router.route('/application/set-general-question-answers/:studentId/:laborJobId')
+  .post(setGeneralQuestionAnswers);
+
+router.route('/application/start-test/:studentId/:laborJobId')
+  .post(startTest);
+
+router.route('/application/set-test-answers/:studentId/:laborJobId')
+  .post(setTestAnswers);
+
+
+
+
 
 
 

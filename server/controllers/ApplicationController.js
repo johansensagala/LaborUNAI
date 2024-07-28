@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import Application from "../models/Application.js";
 import Student from "../models/Student.js";
 
@@ -140,10 +142,153 @@ const setCv = async (req, res) => {
             res.status(400).json({ message: "No file uploaded." });
         }
     } catch (e) {
-        console.error(e.message); // Log error for debugging
+        console.error(e.message);
         res.status(500).json({ message: "Internal server error." });
     }
 };
 
-export { getAllApplication, getApplication, getApplicationByStudentAndLaborJob, saveApplication, setNote, startApply, setCv };
+const setCvInProfile = async (req, res) => {
+    const { studentId, laborJobId } = req.params;
+
+    if (!studentId || !laborJobId) {
+        return res.status(400).json({ message: "Please fulfill studentId and laborJobId." });
+    }
+
+    try {
+        const application = await Application.findOne({ student: studentId, laborJob: laborJobId });
+        if (!application) {
+            return res.status(404).json({ message: "Application not found." });
+        }
+
+        const student = await Student.findById(studentId);
+        if (!student) {
+            return res.status(404).json({ message: "Student not found." });
+        }
+
+        const cvProfile = student.cv;
+        if (!cvProfile) {
+            return res.status(404).json({ message: "CV not found in student profile." });
+        }
+
+        const sourcePath = path.join('files', 'cvProfile', cvProfile.fileName);
+        const destinationPath = path.join('files', 'cvApplication', cvProfile.fileName);
+
+        if (fs.existsSync(sourcePath)) {
+            fs.copyFileSync(sourcePath, destinationPath);
+
+            application.cv = {
+                originalName: cvProfile.originalName,
+                mimeType: cvProfile.mimeType,
+                size: cvProfile.size,
+                fileName: cvProfile.fileName
+            };
+
+            await application.save();
+            res.status(200).json({ message: "CV updated in application successfully.", application });
+        } else {
+            return res.status(404).json({ message: "CV file not found in cvProfile directory." });
+        }
+    } catch (e) {
+        console.error(e.message);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
+
+const setGeneralQuestionAnswers = async (req, res) => {
+    const { studentId, laborJobId } = req.params;
+    const { generalQuestionAnswers } = req.body;
+
+    if (!studentId || !laborJobId) {
+        return res.status(400).json({ message: "Please provide studentId and laborJobId." });
+    }
+
+    if (!Array.isArray(generalQuestionAnswers)) {
+        return res.status(400).json({ message: "Invalid format for generalQuestionAnswers." });
+    }
+
+    try {
+        const application = await Application.findOne({ student: studentId, laborJob: laborJobId });
+        if (!application) {
+            return res.status(404).json({ message: "Application not found." });
+        }
+
+        application.generalQuestionAnswers = generalQuestionAnswers;
+
+        await application.save();
+
+        res.status(200).json({ message: "General Question answers updated successfully.", application });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
+
+const setTestAnswers = async (req, res) => {
+    const { studentId, laborJobId } = req.params;
+    const { testAnswers } = req.body;
+
+    console.log("Received studentId:", studentId); // Log studentId
+    console.log("Received laborJobId:", laborJobId); // Log laborJobId
+    console.log("Received testAnswers:", testAnswers); // Log testAnswers
+
+    if (!studentId || !laborJobId) {
+        return res.status(400).json({ message: "Please provide studentId and laborJobId." });
+    }
+
+    if (!Array.isArray(testAnswers)) {
+        return res.status(400).json({ message: "Invalid format for testAnswers." });
+    }
+
+    try {
+        const application = await Application.findOne({ student: studentId, laborJob: laborJobId });
+        if (!application) {
+            return res.status(404).json({ message: "Application not found." });
+        }
+
+        application.testAnswers = testAnswers;
+
+        await application.save();
+
+        res.status(200).json({ message: "Test answers updated successfully.", application });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
+
+const startTest = async (req, res) => {
+    const { studentId, laborJobId } = req.params;
+
+    if (!studentId || !laborJobId) {
+        return res.status(400).json({ message: "Please provide studentId and laborJobId." });
+    }
+
+    try {
+        const application = await Application.findOne({ student: studentId, laborJob: laborJobId });
+        if (!application) {
+            return res.status(404).json({ message: "Application not found." });
+        }
+
+        application.isTestStarted = true;
+
+        await application.save();
+
+        res.status(200).json({ message: "Test answers updated successfully.", application });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
+
+export {
+    getAllApplication,
+    getApplication,
+    getApplicationByStudentAndLaborJob,
+    saveApplication,
+    setCv,
+    setCvInProfile,
+    setGeneralQuestionAnswers,
+    setNote, setTestAnswers,
+    startApply, startTest
+};
 

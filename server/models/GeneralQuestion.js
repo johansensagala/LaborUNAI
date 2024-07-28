@@ -13,6 +13,18 @@ const GeneralQuestionSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    numberOfQuestionRadio: {
+        type: Number,
+    },
+    numberOfQuestionCheckbox: {
+        type: Number,
+    },
+    optionsOfQuestionRadio: {
+        type: [String],
+    },
+    optionsOfQuestionCheckbox: {
+        type: [String],
+    },
     purpose: {
         type: String,
         required: true,

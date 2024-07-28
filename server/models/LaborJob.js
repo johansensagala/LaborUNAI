@@ -24,6 +24,17 @@ const QuestionSchema = new mongoose.Schema({
     },
 });
 
+const GeneralQuestionRefSchema = new mongoose.Schema({
+    number: {
+        type: Number,
+        required: true,
+    },
+    question: {
+        type: String,
+        required: true,
+    }
+});
+
 const LaborJobSchema = new mongoose.Schema({
     position: {
         type: String,
@@ -88,12 +99,16 @@ const LaborJobSchema = new mongoose.Schema({
         default: true,
         required: true,
     },
-    generalQuestion: {
-        type: [String],
-        ref: 'GeneralQuestion',
+    generalQuestions: {
+        type: [GeneralQuestionRefSchema],
+        required: true,
     },
     questions: {
         type: [QuestionSchema],
+    },
+    testDuration: {
+        type: Number,
+        default: 900,
     },
     isDeleted: {
         type: Boolean,

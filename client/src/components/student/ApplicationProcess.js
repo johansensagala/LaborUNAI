@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import Swal from 'sweetalert2';
 import { StudentContext } from '../../context/StudentContext';
 import Navbar from "../../layouts/Navbar";
 import GeneralQuestion from "./GeneralQuestion";
@@ -16,6 +17,13 @@ const ApplicationProcess = () => {
 
     const [note, setNote] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
+    const [generalQuestionAnswers, setGeneralQuestionAnswers] = useState([]);
+    const [answers, setAnswers] = useState([]);
+
+    // Timer state
+    const [testRemainingTime, setTestRemainingTime] = useState(null);
+    const [isTestStarted, setIsTestStarted] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -32,6 +40,30 @@ const ApplicationProcess = () => {
         }
     }, [application]);
 
+    useEffect(() => {
+        let interval;
+        if (isTestStarted) {
+            interval = setInterval(() => {
+                setTestRemainingTime((prevTime) => {
+                    if (prevTime <= 0) {
+                        clearInterval(interval);
+                        return 0;
+                    }
+                    return prevTime - 1;
+                });
+            }, 1000);
+        }
+
+        return () => clearInterval(interval);
+    }, [isTestStarted]);
+
+    useEffect(() => {
+        if (testRemainingTime === 0 && isTestStarted && !isSubmitted) {
+            submitTestAnswer();
+            setIsSubmitted(true);
+        }
+    }, [testRemainingTime, isTestStarted, isSubmitted]);
+
     const fetchData = async () => {
         if (location.state) {
             setLaborJob(location.state.laborJob);
@@ -39,25 +71,35 @@ const ApplicationProcess = () => {
         }
     };
 
+    const showSuccessAlert = (message) => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: message,
+            confirmButtonText: 'OK'
+        });
+    };
+
     const updateApplication = async () => {
         try {
             const response = await axios.get(`http://localhost:5000/application/${student.id}/${id}`);
             
             setApplication(response.data);
+
+            // Set test timing if test is started
+            if (response.data.isTestStarted) {
+                setTestRemainingTime(response.data.testRemainingTime);
+                setIsTestStarted(true);
+            }
         } catch (error) {
             console.error("Error fetching application data:", error);
             throw error;
         }
     };
 
-    const submitQuestion = () => {
-        console.log("Submit pertanyaan");
-    }
-
     const moveToLayout = (layout) => {
         switch (layout) {
             case 0:
-                console.log(application.note);
                 if (application.note != null) {
                     moveToLayout(1);
                 } else {
@@ -72,24 +114,52 @@ const ApplicationProcess = () => {
                 }
                 break;
             case 2:
-
-                if ((Array.isArray(application.generalQuestionAnswer) && application.generalQuestionAnswer.length > 0) || 
+                if ((Array.isArray(application.generalQuestionAnswers) && application.generalQuestionAnswers.length > 0) || 
                     !laborJob.needGeneralQuestion) {
                     moveToLayout(3);
                 } else {
                     moveForcedToLayout(2);
                 }
                 break;
+            case 3:
+                if ((Array.isArray(application.testAnswers) && application.testAnswers.length > 0) || 
+                    !laborJob.needTest) {
+                    // window.location.href = "https://www.google.com";
+                } else {
+                    Swal.fire({
+                        title: 'Mulai Tes?',
+                        text: "Anda tidak bisa beralih ke halaman lain selama tes berlangsung.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Mulai'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if (!isTestStarted) {
+                                startTest();
+                            }
+                            moveForcedToLayout(3);
+                        }
+                    });
+                }
+                break;
             default:
                 moveForcedToLayout(layout);
                 break;
         }
-        // setActiveLayout(layouts[layout]);
     };
     
     const moveForcedToLayout = (layout) => {
         setActiveLayout(layouts[layout]);
     }
+
+    const handleBack = () => {
+        const currentLayoutIndex = layouts.indexOf(activeLayout);
+        if (currentLayoutIndex > 0) {
+            moveForcedToLayout(currentLayoutIndex - 1);
+        }
+    };
 
     const setDescription = async () => {
         if (note.length < 30) {
@@ -104,6 +174,9 @@ const ApplicationProcess = () => {
 
             console.log("Note berhasil disimpan:", response.data);
             await updateApplication();
+
+            showSuccessAlert('Deksripsi berhasil disimpan!');
+
             moveToLayout(1);
             
         } catch (error) {
@@ -134,11 +207,86 @@ const ApplicationProcess = () => {
             console.log("CV berhasil diunggah:", response.data);
             updateApplication();
             moveToLayout(2);
+            showSuccessAlert('CV berhasil diunggah!');
         } catch (error) {
             console.error("Error saat mengunggah CV:", error);
         }
     };
+
+    const handleUseProfileCV = async () => {
+        try {
+            const response = await axios.post(`http://localhost:5000/application/upload-cv-in-profile/${student.id}/${id}`);
     
+            console.log("CV berhasil diunggah:", response.data);
+            updateApplication();
+            moveToLayout(2);
+            showSuccessAlert('CV berhasil diunggah!');
+        } catch (error) {
+            console.error("Error saat mengunggah CV:", error);
+        }
+    };
+
+    const handleGeneralQuestionAnswerChange = (index, answer) => {
+        const updatedAnswers = [...generalQuestionAnswers];
+        updatedAnswers[index] = answer;
+        setGeneralQuestionAnswers(updatedAnswers);
+    };
+
+    const submitGeneralQuestionAnswer = async () => {
+        try {
+            const response = await axios.post(`http://localhost:5000/application/set-general-question-answers/${student.id}/${id}`, {
+                generalQuestionAnswers,
+            });
+
+            console.log("General answers successfully submitted:", response.data);
+            await updateApplication();
+            showSuccessAlert('Jawaban berhasil disimpan!');
+            moveToLayout(3);
+        } catch (error) {
+            console.error("Error submitting questions:", error);
+        }
+    }
+
+    const handleTestAnswerChange = (index, answer) => {
+        const updatedAnswers = [...answers];
+        updatedAnswers[index] = answer;
+        setAnswers(updatedAnswers);
+    };
+
+    const startTest = async () => {
+        try {
+            
+            const testDurationInSeconds = laborJob.testDuration;
+
+            await axios.post(`http://localhost:5000/application/start-test/${student.id}/${id}`);
+
+            setTestRemainingTime(testDurationInSeconds);
+            setIsTestStarted(true);
+        } catch (error) {
+            console.error("Error starting test:", error);
+        }
+    }
+
+    const submitTestAnswer = async () => {
+        try {
+            console.log("Submitting test answers:", answers);
+
+            const response = await axios.post(`http://localhost:5000/application/set-test-answers/${student.id}/${id}`, {
+                testAnswers: answers,
+            });
+
+            console.log("Answers successfully submitted:", response.data);
+            await updateApplication();
+            // window.location.href = "https://www.google.com";
+        } catch (error) {
+            console.error("Error submitting questions:", error);
+        }
+    }
+
+    const checkLog = () => {
+        console.log(answers);
+    }
+
     return (
         <>
             <Navbar />
@@ -232,6 +380,22 @@ const ApplicationProcess = () => {
                                         Unggah CV
                                     </button>
                                 </div>
+                                <div className="control">
+                                    <button
+                                        className="button is-info"
+                                        onClick={handleUseProfileCV}
+                                    >
+                                        Gunakan CV di profile saya
+                                    </button>
+                                </div>
+                                <div className="control">
+                                    <button
+                                        className="button is-link"
+                                        onClick={handleBack}
+                                    >
+                                        Kembali
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -248,22 +412,31 @@ const ApplicationProcess = () => {
                         </div>
 
                         <div className="box my-5 p-5">
-                            {laborJob.questions && laborJob.questions.length === 0 && <p className="mb-4">Belum ada pertanyaan</p>}
-                            {laborJob.questions && laborJob.questions.map((item, index) => (
+                            {laborJob.generalQuestions && laborJob.generalQuestions.length === 0 && <p className="mb-4">Belum ada pertanyaan</p>}
+                            {laborJob.generalQuestions && laborJob.generalQuestions.map((item, index) => (
                                 <GeneralQuestion
                                     key={index}
                                     item={item}
                                     index={index}
+                                    handleGeneralQuestionAnswerChange={handleGeneralQuestionAnswerChange}
                                 />
                             ))}
 
-                            {laborJob.questions && laborJob.questions.length !== 0 &&
+                            {laborJob.generalQuestions && laborJob.generalQuestions.length !== 0 &&
                                 <div className="field is-grouped">
                                     <div className="control">
-                                        <button className="button is-primary is-pulled-right" type="submit" onClick={submitQuestion}>Submit Pertanyaan</button>
+                                        <button className="button is-primary is-pulled-right" type="submit" onClick={submitGeneralQuestionAnswer}>Submit Pertanyaan</button>
                                     </div>
                                 </div>
                             }
+                            <div className="control">
+                                <button
+                                    className="button is-link"
+                                    onClick={handleBack}
+                                >
+                                    Kembali
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -279,20 +452,30 @@ const ApplicationProcess = () => {
                         </div>
 
                         <div className="box my-5 p-5">
-                            {laborJob.pertanyaan && laborJob.pertanyaan.length === 0 && <p className="mb-4">Belum ada pertanyaan</p>}
-                            {laborJob.pertanyaan && laborJob.pertanyaan.map((item, index) => (
+                            {testRemainingTime > 0 && laborJob.testDuration && (
+                                <div className="notification is-info">
+                                    Waktu tersisa: {Math.floor(testRemainingTime / 60)}:{('0' + (testRemainingTime % 60)).slice(-2)}
+                                </div>
+                            )}
+                            {laborJob.questions && laborJob.questions.length === 0 && <p className="mb-4">Belum ada pertanyaan</p>}
+                            {laborJob.questions && laborJob.questions.map((item, index) => (
                                 <Question
                                     key={index}
                                     item={item}
                                     index={index}
+                                    handleTestAnswerChange={handleTestAnswerChange}
                                 />
                             ))}
 
-                            {laborJob.pertanyaan && laborJob.pertanyaan.length !== 0 &&
+                            {laborJob.questions && laborJob.questions.length !== 0 &&
                                 <div className="field is-grouped">
                                     <div className="control">
-                                        <button className="button is-primary is-pulled-right" type="submit" onClick={submitQuestion}>Submit Pertanyaan</button>
+                                        <button className="button is-primary is-pulled-right" type="submit" onClick={submitTestAnswer}>Submit Pertanyaan</button>
                                     </div>
+                                    <div className="control">
+                                        <button className="button is-primary is-pulled-right" type="submit" onClick={checkLog}>Check Log</button>
+                                    </div>
+
                                 </div>
                             }
                         </div>

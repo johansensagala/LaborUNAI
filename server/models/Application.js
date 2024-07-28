@@ -59,13 +59,20 @@ const ApplicationSchema = new mongoose.Schema({
     cv: {
         type: CvSchema,
     },
-    generalQuestionAnswer: {
+    generalQuestionAnswers: {
         type: [AnswerSchema],
         default: [],
     },
-    testAnswer: {
+    testAnswers: {
         type: [AnswerSchema],
         default: [],
+    },
+    testRemainingTime: {
+        type: Number,
+    },
+    isTestStarted: {
+        type: Boolean,
+        default: false,
     },
     sentDate: {
         type: Date,
