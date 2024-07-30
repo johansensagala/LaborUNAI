@@ -227,10 +227,6 @@ const setTestAnswers = async (req, res) => {
     const { studentId, laborJobId } = req.params;
     const { testAnswers } = req.body;
 
-    console.log("Received studentId:", studentId); // Log studentId
-    console.log("Received laborJobId:", laborJobId); // Log laborJobId
-    console.log("Received testAnswers:", testAnswers); // Log testAnswers
-
     if (!studentId || !laborJobId) {
         return res.status(400).json({ message: "Please provide studentId and laborJobId." });
     }
@@ -280,7 +276,33 @@ const startTest = async (req, res) => {
     }
 };
 
+const finishApplication = async (req, res) => {
+    const { studentId, laborJobId } = req.params;
+
+    if (!studentId || !laborJobId) {
+        return res.status(400).json({ message: "Please provide studentId and laborJobId." });
+    }
+
+    try {
+        const application = await Application.findOne({ student: studentId, laborJob: laborJobId });
+        if (!application) {
+            return res.status(404).json({ message: "Application not found." });
+        }
+
+        application.status = "SUBMITTED";
+        application.sentDate = new Date();
+
+        await application.save();
+
+        res.status(200).json({ message: "Test answers updated successfully.", application });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
+
 export {
+    finishApplication,
     getAllApplication,
     getApplication,
     getApplicationByStudentAndLaborJob,
@@ -288,7 +310,9 @@ export {
     setCv,
     setCvInProfile,
     setGeneralQuestionAnswers,
-    setNote, setTestAnswers,
-    startApply, startTest
+    setNote,
+    setTestAnswers,
+    startApply,
+    startTest
 };
 

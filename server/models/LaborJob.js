@@ -110,6 +110,14 @@ const LaborJobSchema = new mongoose.Schema({
         type: Number,
         default: 900,
     },
+    needInterview: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
+    interviewSchedule: {
+        type: Date,
+    },
     isDeleted: {
         type: Boolean,
         default: false,

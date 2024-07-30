@@ -124,7 +124,7 @@ const ApplicationProcess = () => {
             case 3:
                 if ((Array.isArray(application.testAnswers) && application.testAnswers.length > 0) || 
                     !laborJob.needTest) {
-                    // window.location.href = "https://www.google.com";
+                    moveToLayout(-1);
                 } else {
                     Swal.fire({
                         title: 'Mulai Tes?',
@@ -145,7 +145,7 @@ const ApplicationProcess = () => {
                 }
                 break;
             default:
-                moveForcedToLayout(layout);
+                finishApplication();
                 break;
         }
     };
@@ -267,7 +267,7 @@ const ApplicationProcess = () => {
         }
     }
 
-    const submitTestAnswer = async () => {
+    const saveTestAnswer = async () => {
         try {
             console.log("Submitting test answers:", answers);
 
@@ -276,15 +276,48 @@ const ApplicationProcess = () => {
             });
 
             console.log("Answers successfully submitted:", response.data);
+        } catch (error) {
+            console.error("Error submitting questions:", error);
+        }
+    }    
+
+    const submitTestAnswer = async () => {
+        try {
+            await saveTestAnswer();
             await updateApplication();
-            // window.location.href = "https://www.google.com";
+
+            finishApplication();
         } catch (error) {
             console.error("Error submitting questions:", error);
         }
     }
 
-    const checkLog = () => {
-        console.log(answers);
+    const submitTestAnswerWithoutRedirect = async () => {
+        try {
+            await saveTestAnswer();
+            
+            finishApplicationWithoutRedirect();
+        } catch (error) {
+            console.error("Error submitting questions:", error);
+        }
+    }
+
+    const finishApplication = async () => {
+        try {
+            await finishApplicationWithoutRedirect();
+
+            window.location.href = `/student/labor-job/${laborJob._id}`;
+        } catch (error) {
+            console.error("Error finishing test:", error);
+        }
+    }
+
+    const finishApplicationWithoutRedirect = async () => {
+        try {
+            await axios.post(`http://localhost:5000/application/finish-application/${student.id}/${id}`);
+        } catch (error) {
+            console.error("Error finishing test:", error);
+        }
     }
 
     return (
@@ -464,6 +497,7 @@ const ApplicationProcess = () => {
                                     item={item}
                                     index={index}
                                     handleTestAnswerChange={handleTestAnswerChange}
+                                    submitTestAnswerWithoutRedirect={submitTestAnswerWithoutRedirect}
                                 />
                             ))}
 
@@ -472,10 +506,6 @@ const ApplicationProcess = () => {
                                     <div className="control">
                                         <button className="button is-primary is-pulled-right" type="submit" onClick={submitTestAnswer}>Submit Pertanyaan</button>
                                     </div>
-                                    <div className="control">
-                                        <button className="button is-primary is-pulled-right" type="submit" onClick={checkLog}>Check Log</button>
-                                    </div>
-
                                 </div>
                             }
                         </div>

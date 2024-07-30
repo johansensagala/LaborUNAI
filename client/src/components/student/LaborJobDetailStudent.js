@@ -13,6 +13,7 @@ const LaborJobDetailStudent = () => {
     const [laborJob, setLaborJob] = useState({});
     const [application, setApplication] = useState({});
     const [hasApplied, setHasApplied] = useState(false);
+    const [hasSubmitted, setHasSubmitted] = useState(false);
     const [departmentName, setDepartmentName] = useState('');
 
     const navigate = useNavigate();
@@ -31,13 +32,17 @@ const LaborJobDetailStudent = () => {
                 const applicationResult = await findApplication();
                 setApplication(applicationResult);
                 setHasApplied(!!applicationResult._id);
+                
+                if (applicationResult.status === "SUBMITTED") {
+                    setHasSubmitted(true);
+                }
             } else {
                 console.error("Student data is not available");
             }
         } catch (error) {
             console.error("Error checking student application:", error);
         }
-    };    
+    };
 
     const getLaborJob = async () => {
         try {
@@ -135,13 +140,17 @@ const LaborJobDetailStudent = () => {
                         ))}
                     </ul>
 
-                    {!hasApplied ? (
+                    {hasSubmitted ? (
                         <div className="buttons is-centered mt-5">
-                            <button className="button is-primary" onClick={handleApplyClick}>Lamar Sekarang</button>
+                            <button className="button is-primary" disabled>Lamaran Terkirim</button>
+                        </div>
+                    ) : hasApplied ? (
+                        <div className="buttons is-centered mt-5">
+                            <button className="button is-primary" onClick={handleApplyProcess}>Lanjutkan lamaran</button>
                         </div>
                     ) : (
                         <div className="buttons is-centered mt-5">
-                            <button className="button is-primary" onClick={handleApplyProcess}>Lanjutkan lamaran</button>
+                            <button className="button is-primary" onClick={handleApplyClick}>Lamar Sekarang</button>
                         </div>
                     )}
                 </div>

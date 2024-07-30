@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const Question = ({ item, index, handleTestAnswerChange }) => {
+const Question = ({ item, index, handleTestAnswerChange, submitTestAnswerWithoutRedirect }) => {
     const [answer, setAnswer] = useState({
         number: item.number,
         textAnswer: '',
@@ -10,6 +10,7 @@ const Question = ({ item, index, handleTestAnswerChange }) => {
 
     useEffect(() => {
         handleTestAnswerChange(index, answer);
+        submitTestAnswerWithoutRedirect();
     }, [answer]);
 
     const handleTextChange = (e) => {
