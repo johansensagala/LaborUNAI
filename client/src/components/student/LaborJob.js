@@ -3,11 +3,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { StudentContext } from '../../context/StudentContext';
+import { AppConfigContext } from "../../context/AppConfigContext";
 
 const LaborJob = () => {
   const [laborJob, setLaborJob] = useState([]);
   const [departmentNames, setDepartmentNames] = useState([]);
   const { student } = useContext(StudentContext);
+  const { backendUrl } = useContext(AppConfigContext);
 
   useEffect(() => {
     getLaborJob();
@@ -15,7 +17,7 @@ const LaborJob = () => {
 
   const getLaborJob = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/labor-job");
+      const response = await axios.get("${backendUrl}/labor-job");
       setLaborJob(response.data);
 
       const departmentNamePromises = response.data.map((laborJob) =>
@@ -30,7 +32,7 @@ const LaborJob = () => {
 
   const getDepartmentName = async (departmentId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/department/${departmentId}`);
+      const response = await axios.get(`${backendUrl}/department/${departmentId}`);
       return response.data.departmentName;
     } catch (error) {
       console.error("Error fetching department data:", error);

@@ -5,10 +5,12 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { StudentContext } from '../../context/StudentContext';
 import Navbar from "../../layouts/Navbar";
+import { AppConfigContext } from "../../context/AppConfigContext";
 
 const LaborJobDetailStudent = () => {
     const { student } = useContext(StudentContext);
     const { id } = useParams();
+    const { backendUrl } = useContext(AppConfigContext);
 
     const [laborJob, setLaborJob] = useState({});
     const [application, setApplication] = useState({});
@@ -46,7 +48,7 @@ const LaborJobDetailStudent = () => {
 
     const getLaborJob = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/labor-job/${id}`);
+            const response = await axios.get(`${backendUrl}/labor-job/${id}`);
             setLaborJob(response.data);
             getDepartmentName(response.data.department);
         } catch (error) {
@@ -56,7 +58,7 @@ const LaborJobDetailStudent = () => {
 
     const getDepartmentName = async (departemenId) => {
         try {
-            const response = await axios.get(`http://localhost:5000/department/${departemenId}`);
+            const response = await axios.get(`${backendUrl}/department/${departemenId}`);
             setDepartmentName(response.data.departmentName);
         } catch (error) {
             console.error("Error fetching department data:", error);
@@ -65,7 +67,7 @@ const LaborJobDetailStudent = () => {
 
     const startApply = async () => {
         try {
-            await axios.post(`http://localhost:5000/application/${student.id}/${id}`);
+            await axios.post(`${backendUrl}/application/${student.id}/${id}`);
         } catch (error) {
             console.error("Error starting application:", error);
         }
@@ -73,7 +75,7 @@ const LaborJobDetailStudent = () => {
 
     const findApplication = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/application/${student.id}/${id}`);
+            const response = await axios.get(`${backendUrl}/application/${student.id}/${id}`);
             return response.data;
         } catch (error) {
             console.error("Error fetching application data:", error);

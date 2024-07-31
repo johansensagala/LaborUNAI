@@ -6,10 +6,12 @@ import { StudentContext } from '../../context/StudentContext';
 import Navbar from "../../layouts/Navbar";
 import GeneralQuestion from "./GeneralQuestion";
 import Question from "./Question";
+import { AppConfigContext } from "../../context/AppConfigContext";
 
 const ApplicationProcess = () => {
     const { student } = useContext(StudentContext);
     const { id } = useParams();
+    const { backendUrl } = useContext(AppConfigContext);
 
     const [laborJob, setLaborJob] = useState({});
     const [application, setApplication] = useState({});
@@ -82,7 +84,7 @@ const ApplicationProcess = () => {
 
     const updateApplication = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/application/${student.id}/${id}`);
+            const response = await axios.get(`${backendUrl}/application/${student.id}/${id}`);
             
             setApplication(response.data);
 
@@ -168,7 +170,7 @@ const ApplicationProcess = () => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:5000/application/set-note/${student.id}/${id}`, {
+            const response = await axios.post(`${backendUrl}/application/set-note/${student.id}/${id}`, {
                 note,
             });
 
@@ -198,7 +200,7 @@ const ApplicationProcess = () => {
         formData.append('cv', selectedFile);
     
         try {
-            const response = await axios.post(`http://localhost:5000/application/upload-cv/${student.id}/${id}`, formData, {
+            const response = await axios.post(`${backendUrl}/application/upload-cv/${student.id}/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -215,7 +217,7 @@ const ApplicationProcess = () => {
 
     const handleUseProfileCV = async () => {
         try {
-            const response = await axios.post(`http://localhost:5000/application/upload-cv-in-profile/${student.id}/${id}`);
+            const response = await axios.post(`${backendUrl}/application/upload-cv-in-profile/${student.id}/${id}`);
     
             console.log("CV berhasil diunggah:", response.data);
             updateApplication();
@@ -234,7 +236,7 @@ const ApplicationProcess = () => {
 
     const submitGeneralQuestionAnswer = async () => {
         try {
-            const response = await axios.post(`http://localhost:5000/application/set-general-question-answers/${student.id}/${id}`, {
+            const response = await axios.post(`${backendUrl}/application/set-general-question-answers/${student.id}/${id}`, {
                 generalQuestionAnswers,
             });
 
@@ -258,7 +260,7 @@ const ApplicationProcess = () => {
             
             const testDurationInSeconds = laborJob.testDuration;
 
-            await axios.post(`http://localhost:5000/application/start-test/${student.id}/${id}`);
+            await axios.post(`${backendUrl}/application/start-test/${student.id}/${id}`);
 
             setTestRemainingTime(testDurationInSeconds);
             setIsTestStarted(true);
@@ -271,7 +273,7 @@ const ApplicationProcess = () => {
         try {
             console.log("Submitting test answers:", answers);
 
-            const response = await axios.post(`http://localhost:5000/application/set-test-answers/${student.id}/${id}`, {
+            const response = await axios.post(`${backendUrl}/application/set-test-answers/${student.id}/${id}`, {
                 testAnswers: answers,
             });
 
@@ -279,7 +281,7 @@ const ApplicationProcess = () => {
         } catch (error) {
             console.error("Error submitting questions:", error);
         }
-    }    
+    }
 
     const submitTestAnswer = async () => {
         try {
@@ -314,7 +316,7 @@ const ApplicationProcess = () => {
 
     const finishApplicationWithoutRedirect = async () => {
         try {
-            await axios.post(`http://localhost:5000/application/finish-application/${student.id}/${id}`);
+            await axios.post(`${backendUrl}/application/finish-application/${student.id}/${id}`);
         } catch (error) {
             console.error("Error finishing test:", error);
         }

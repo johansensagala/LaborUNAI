@@ -1,7 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { AppConfigContext } from "../../context/AppConfigContext";
 
 const GeneralQuestion = ({ item, index, handleGeneralQuestionAnswerChange }) => {
+    const { backendUrl } = useContext(AppConfigContext);
+
     const [answer, setAnswer] = useState({
         number: item.number,
         textAnswer: '',
@@ -21,7 +24,7 @@ const GeneralQuestion = ({ item, index, handleGeneralQuestionAnswerChange }) => 
 
     const getCurrentQuestion = async (code) => {
         try {
-            const response = await axios.get(`http://localhost:5000/general-question/${code}`);
+            const response = await axios.get(`${backendUrl}/general-question/${code}`);
             
             setCurrentQuestion(response.data);
         } catch (error) {

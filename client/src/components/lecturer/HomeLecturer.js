@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
-import Navbar from '../../layouts/Navbar';
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LecturerContext } from '../../context/LecturerContext';
-import axios from 'axios';
+import Navbar from '../../layouts/Navbar';
+import { AppConfigContext } from '../../context/AppConfigContext';
 
 const HomeLecturer = () => {
   const { lecturer } = useContext(LecturerContext);
   const [departmentNames, setDepartmentNames] = useState([]);
   const [laborJob, setLaborJob] = useState([]);
+  const { backendUrl } = useContext(AppConfigContext);
 
   useEffect(() => {
     if (lecturer && lecturer.id) {
@@ -18,7 +20,7 @@ const HomeLecturer = () => {
   const getLaborJob = async (lecturerId) => {
     try {
       console.log(lecturerId)
-      const response = await axios.get(`http://localhost:5000/labor-job/lecturer/${lecturerId}`);
+      const response = await axios.get(`${backendUrl}/labor-job/lecturer/${lecturerId}`);
       setLaborJob(response.data);
 
       const departmentNamesPromises = response.data.map((laborJob) =>
@@ -33,7 +35,7 @@ const HomeLecturer = () => {
 
   const getDepartmentName = async (departmentId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/department/${departmentId}`);
+      const response = await axios.get(`${backendUrl}/department/${departmentId}`);
       return response.data.departmentName;
     } catch (error) {
       console.error("Error fetching department data:", error);

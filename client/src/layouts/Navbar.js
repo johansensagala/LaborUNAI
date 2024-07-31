@@ -10,7 +10,7 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         try {
-            await fetch('http://localhost:5000/student/logout', {
+            await fetch('${backendUrl}/student/logout', {
                 method: 'GET',
                 credentials: 'include',
             });

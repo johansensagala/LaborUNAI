@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+import React, { useEffect, useState, useContext } from "react";
 import { FaCheck } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import Navbar from "../../layouts/Navbar";
+import { AppConfigContext } from "../../context/AppConfigContext";
 
 const LaborJobDetailLecturer = () => {
     const [laborJob, setLaborJob] = useState({});
     const { id } = useParams();
     const [departmentName, setDepartmentName] = useState('');
     const [skill, setSkill] = useState([]);
+    const { backendUrl } = useContext(AppConfigContext);
 
     useEffect(() => {
         getLaborJob();
@@ -17,7 +19,7 @@ const LaborJobDetailLecturer = () => {
     
     const getLaborJob = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/labor-job/${id}`);
+            const response = await axios.get(`${backendUrl}/labor-job/${id}`);
             setLaborJob(response.data);
     
             getDepartmentName(response.data.department);
@@ -28,7 +30,7 @@ const LaborJobDetailLecturer = () => {
 
     const getDepartmentName = async (departemenId) => {
         try {
-            const response = await axios.get(`http://localhost:5000/department/${departemenId}`);
+            const response = await axios.get(`${backendUrl}/department/${departemenId}`);
             setDepartmentName(response.data.departmentName);
         } catch (error) {
             console.error("Error fetching department data:", error);

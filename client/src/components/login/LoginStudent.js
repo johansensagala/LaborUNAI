@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AppConfigContext } from '../../context/AppConfigContext';
 
 const LoginStudent = () => {
   const [nim, setNim] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { backendUrl } = useContext(AppConfigContext);
 
   const handleLogin = async () => {
     try {
@@ -16,7 +17,7 @@ const LoginStudent = () => {
         return;
       }
 
-      const response = await axios.post('http://localhost:5000/student/login', { nim, password }, { withCredentials: true });
+      const response = await axios.post('${backendUrl}/student/login', { nim, password }, { withCredentials: true });
 
       if (response.status === 200) {
         if (response.data.token) {

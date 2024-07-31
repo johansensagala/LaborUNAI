@@ -3,9 +3,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import Swal from "sweetalert2";
 import { StudentContext } from '../../context/StudentContext';
 import Navbar from '../../layouts/Navbar';
+import { AppConfigContext } from "../../context/AppConfigContext";
 
 const Profil = () => {
   const { student } = useContext(StudentContext);
+  const { backendUrl } = useContext(AppConfigContext);
   const [showModal, setShowModal] = useState(false);
   const [skill, setSkill] = useState([]);
   const [newSkill, setNewSkill] = useState([]);
@@ -22,7 +24,7 @@ const Profil = () => {
   const fetchCv = async () => {
     try {
       if (student) {
-        const response = await axios.get(`http://localhost:5000/cv/${student.id}/get`);
+        const response = await axios.get(`${backendUrl}/cv/${student.id}/get`);
 
         if (response) {
           setCv(response.data);
@@ -37,7 +39,7 @@ const Profil = () => {
   const fetchSkill = async () => {
     try {
       if (student) {
-        const response = await axios.get(`http://localhost:5000/student/${student.id}/get-skill`);
+        const response = await axios.get(`${backendUrl}/student/${student.id}/get-skill`);
         setSkill(response.data);
         setNewSkill(response.data);
       }
@@ -75,7 +77,7 @@ const Profil = () => {
     formData.append('cv', selectedFile);
 
     try {
-      await axios.put(`http://localhost:5000/cv/${student.id}/upload`, formData, {
+      await axios.put(`${backendUrl}/cv/${student.id}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -104,7 +106,7 @@ const Profil = () => {
       });
 
       if (result.isConfirmed) {
-        await axios.delete(`http://localhost:5000/cv/${student.id}/delete`);
+        await axios.delete(`${backendUrl}/cv/${student.id}/delete`);
 
         Swal.fire('Sukses', 'CV berhasil dihapus.', 'success');
         setCv(null);
@@ -173,7 +175,7 @@ const Profil = () => {
 
   const handleSaveChanges = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/student/${student.id}/update-skill`, { newSkill });
+      const response = await axios.put(`${backendUrl}/student/${student.id}/update-skill`, { newSkill });
       console.log(response.data);
       setSkill(newSkill);
       setShowModal(false);
@@ -377,7 +379,7 @@ const Profil = () => {
               <button className="delete" aria-label="close" onClick={() => setShowPdfModal(false)}></button>
             </header>
             <section className="modal-card-body" style={{ overflow: 'hidden' }}>
-              <embed src={`http://localhost:5000/${cv}`} type="application/pdf" width="100%" height="100%" />
+              <embed src={`${backendUrl}/${cv}`} type="application/pdf" width="100%" height="100%" />
             </section>
           </div>
         </div>

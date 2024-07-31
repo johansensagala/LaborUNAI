@@ -5,11 +5,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert';
 import { LecturerContext } from "../../context/LecturerContext";
 import Navbar from "../../layouts/Navbar";
+import { AppConfigContext } from "../../context/AppConfigContext";
 
 const CreateLaborJob = () => {
     const { lecturer } = useContext(LecturerContext);
     const location = useLocation();
     const navigate = useNavigate();
+    const { backendUrl } = useContext(AppConfigContext);
     
     const [position, setPosition] = useState("");
     const [department, setDepartment] = useState("");
@@ -47,7 +49,7 @@ const CreateLaborJob = () => {
 
         console.log(lecturer.id);
         try {
-            const response = await axios.post(`http://localhost:5000/labor-job`, {
+            const response = await axios.post(`${backendUrl}/labor-job`, {
                 position,
                 departmentId: department,
                 recruiter: lecturer.id,
@@ -94,7 +96,7 @@ const CreateLaborJob = () => {
 
     const getDepartmentByLecturer = async (lecturerId) => {
         try {
-            const response = await axios.get(`http://localhost:5000/department/lecturer/${lecturerId}`);
+            const response = await axios.get(`${backendUrl}/department/lecturer/${lecturerId}`);
             setDepartmentList(response.data);
         } catch (error) {
             console.error("Error fetching department data:", error);
