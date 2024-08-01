@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AppConfigContext } from '../context/AppConfigContext';
 import { LecturerContext } from "../context/LecturerContext";
 import { StudentContext } from "../context/StudentContext";
 
@@ -7,10 +8,11 @@ const Navbar = () => {
     const { student } = useContext(StudentContext);
     const { lecturer } = useContext(LecturerContext);
     const navigate = useNavigate();
+    const { backendUrl } = useContext(AppConfigContext);
 
     const handleLogout = async () => {
         try {
-            await fetch('${backendUrl}/student/logout', {
+            await fetch(`${backendUrl}/student/logout`, {
                 method: 'GET',
                 credentials: 'include',
             });

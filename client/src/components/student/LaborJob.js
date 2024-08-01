@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { StudentContext } from '../../context/StudentContext';
 import { AppConfigContext } from "../../context/AppConfigContext";
+import { StudentContext } from '../../context/StudentContext';
 
 const LaborJob = () => {
   const [laborJob, setLaborJob] = useState([]);
@@ -17,7 +17,7 @@ const LaborJob = () => {
 
   const getLaborJob = async () => {
     try {
-      const response = await axios.get("${backendUrl}/labor-job");
+      const response = await axios.get(`${backendUrl}/labor-job`);
       setLaborJob(response.data);
 
       const departmentNamePromises = response.data.map((laborJob) =>

@@ -17,7 +17,7 @@ const LoginLecturer = () => {
         return;
       }
 
-      const response = await axios.post('${backendUrl}/lecturer/login', { nip, password }, { withCredentials: true });
+      const response = await axios.post(`${backendUrl}/lecturer/login`, { nip, password }, { withCredentials: true });
 
       if (response.status === 200) {
         if (response.data.token) {
